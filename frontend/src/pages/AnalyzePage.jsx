@@ -11,7 +11,9 @@ import ScoreExplanationPanel from "../components/ScoreExplanationPanel";
 import KeywordExplanationPanel from "../components/KeywordExplanationPanel";
 import RewriteExplanationPanel from "../components/RewriteExplanationPanel";
 
-const PUBLIC_DEMO_ONLY = import.meta.env.VITE_PUBLIC_DEMO_ONLY === "true";
+const PUBLIC_DEMO_ONLY =
+  import.meta.env.VITE_PUBLIC_DEMO_ONLY === "true" ||
+  window.location.hostname.includes("vercel.app");
 
 const DEMO_POLICIES = [
   {
@@ -65,41 +67,39 @@ export default function AnalyzePage() {
     }
 
     if (PUBLIC_DEMO_ONLY) {
-      setIsScoring(true);
-      setLoadingStep(2);
-      setStatusMessage("Demo mode: generating sample analysis...");
+        setIsScoring(true);
+        setLoadingStep(2);
+        setStatusMessage("Demo mode: generating sample analysis...");
 
-      setTimeout(() => {
-        const fakeScores = {
-          Formality: 3.7,
-          Politeness: 4.0,
-          Affect: 3.6,
-          Strictness: 3.4,
-          Clarity: 4.5,
-          Contestability: 3.8,
-        };
+        setTimeout(() => {
+          const fakeScores = {
+            Formality: 3.7,
+            Politeness: 4.0,
+            Affect: 3.6,
+            Strictness: 3.4,
+            Clarity: 4.5,
+            Contestability: 3.8,
+          };
 
-        setScores(fakeScores);
-        setOriginalScores(fakeScores);
-        setAiPolicyText(input);
-        setKeywordsByCategory({
-          Formality: ["academic misconduct", "university procedures"],
-          Politeness: ["please ask", "responsible for checking"],
-          Affect: ["support", "guidance"],
-          Strictness: ["may not use", "must represent"],
-          Clarity: ["when AI is used", "if expectations are unclear"],
-          Contestability: ["ask before using AI", "if you are unsure"],
-        });
+          setScores(fakeScores);
+          setOriginalScores(fakeScores);
+          setAiPolicyText(input);
+          setKeywordsByCategory({
+            Formality: ["academic misconduct", "university procedures"],
+            Politeness: ["please ask", "responsible for checking"],
+            Affect: ["support", "guidance"],
+            Strictness: ["may not use", "must represent"],
+            Clarity: ["when AI is used", "if expectations are unclear"],
+            Contestability: ["ask before using AI", "if you are unsure"],
+          });
 
-        setStatusMessage(
-          "Demo analysis complete. Live AI scoring runs on the conference laptop."
-        );
-        setIsScoring(false);
-        setLoadingStep(0);
-      }, 1200);
+          setStatusMessage("Demo analysis complete.");
+          setIsScoring(false);
+          setLoadingStep(0);
+        }, 1000);
 
-      return;
-    }
+        return;
+      }
 
     setIsScoring(true);
     setLoadingStep(1);
