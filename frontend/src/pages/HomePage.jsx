@@ -11,7 +11,7 @@ export default function HomePage({ onStart, onAbout }) {
         <div style={heroText}>
           <div style={eyebrow}>Research prototype for higher education AI policy</div>
 
-          <h1 style={title}>{APP_NAME}</h1>
+          <h1 className="home-title" style={title}>{APP_NAME}</h1>
 
           <p style={subtitle}>
             A perception-analysis tool for understanding how AI syllabus policy
@@ -139,8 +139,9 @@ export default function HomePage({ onStart, onAbout }) {
         <h2 style={pipelineGraphicTitle}>
             A research-informed workflow from syllabus text to actionable feedback.
         </h2>
-
-        <PipelineGraphic />
+        <div className="pipeline-graphic-mobile">
+            <PipelineGraphic />
+        </div>
         </section>   
 
       <section style={finalCta}>
