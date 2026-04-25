@@ -169,3 +169,68 @@ img {
     max-width: 100% !important;
   }
 }
+
+/* EXTRA SMALL PHONES FIX (iPhone 12 Pro and smaller) */
+@media (max-width: 480px) {
+
+  .app-content {
+    padding: 12px 10px !important;
+  }
+
+  /* HERO TEXT FIX */
+  .home-title {
+    font-size: clamp(42px, 16vw, 64px) !important;
+    line-height: 0.95 !important;
+    letter-spacing: -2px !important;
+    max-width: 100% !important;
+  }
+
+  /* BUTTON STACK FIX */
+  .home-button-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  /* PREVENT HORIZONTAL OVERFLOW */
+  .home-hero,
+  .mission-section,
+  .section-grid > *,
+  .pipeline-grid > *,
+  section {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* PRODUCT MOCK FIX */
+  .home-hero > div:last-child {
+    width: 100% !important;
+  }
+
+  /* CATEGORY PAGE FIX */
+  h1 {
+    font-size: clamp(36px, 12vw, 50px) !important;
+    line-height: 1 !important;
+  }
+
+  h2 {
+    font-size: clamp(24px, 7vw, 32px) !important;
+  }
+
+  /* TRADEOFF BOX FIX */
+  .tradeoff-box {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* SLIDER FIX */
+  input[type="range"] {
+    width: 100% !important;
+  }
+
+  /* PIPELINE SCROLL FIX */
+  .pipeline-graphic-mobile > * {
+    min-width: 720px !important;
+  }
+}

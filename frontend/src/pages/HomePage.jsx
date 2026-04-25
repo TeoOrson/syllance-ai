@@ -18,7 +18,7 @@ export default function HomePage({ onStart, onAbout }) {
             language shapes clarity, authority, trust, and student response.
           </p>
 
-          <div style={buttonRow}>
+          <div className="home-button-row" style={buttonRow}>
             <button onClick={onStart} style={primaryButton}>
               Analyze now
             </button>
