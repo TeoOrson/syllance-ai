@@ -1,24 +1,35 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
 async function fetchJson(path, body, method = "POST") {
-  const response = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: method === "GET" ? undefined : JSON.stringify(body),
-  });
-
-  const raw = await response.text();
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${raw}`);
-  }
-
   try {
-    return JSON.parse(raw);
+    const response = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: method === "GET" ? undefined : JSON.stringify(body),
+    });
+
+    const raw = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${raw}`);
+    }
+
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      throw new Error(`Invalid JSON from backend: ${error.message}`);
+    }
   } catch (error) {
-    throw new Error(`Invalid JSON from backend: ${error.message}`);
+    console.error("API error:", error);
+
+    return {
+      demo: true,
+      error: true,
+      message:
+        "Demo mode: the live frontend is running, but the backend analysis server is not connected right now.",
+    };
   }
 }
 
@@ -27,10 +38,10 @@ export function scorePolicy(text, optimizeFor = "autonomy") {
 }
 
 export function rewritePolicy(policyText, mode = "autonomy") {
-    return fetchJson("/api/rewrite", {
-        policy_text: policyText,
-        mode,
-    });
+  return fetchJson("/api/rewrite", {
+    policy_text: policyText,
+    mode,
+  });
 }
 
 export function healthCheck() {
@@ -44,7 +55,12 @@ export function scorePolicyDirect(policyText, optimizeFor = "autonomy") {
   });
 }
 
-export function rewriteOptimizePolicy(policyText, mode = "autonomy", count = 3, runMode = "fast") {
+export function rewriteOptimizePolicy(
+  policyText,
+  mode = "autonomy",
+  count = 3,
+  runMode = "fast"
+) {
   return fetchJson("/api/rewrite-optimize", {
     policy_text: policyText,
     mode,
