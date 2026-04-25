@@ -80,7 +80,9 @@ export default function Header({ page, setPage }) {
             }}
             aria-label="Open menu"
           >
-            {menuOpen ? "×" : "☰"}
+            <span style={{ display: "block", transform: menuOpen ? "rotate(90deg)" : "none" }}>
+              {menuOpen ? "×" : "☰"}
+            </span>
           </button>
         </div>
 
@@ -222,6 +224,9 @@ const hamburger = {
   fontWeight: 900,
   cursor: "pointer",
   transition: "all 0.18s ease",
+  display: "grid",
+  placeItems: "center",
+  boxShadow: "0 12px 34px rgba(0,0,0,0.28)",
 };
 
 const researchDropdown = {
@@ -264,6 +269,7 @@ const mobileDropdown = {
   background:
     "linear-gradient(180deg, rgba(18,20,32,0.99), rgba(8,10,18,0.99))",
   boxShadow: "0 28px 90px rgba(0,0,0,0.62)",
+  animation: "menuDrop 0.18s ease both",
 };
 
 const mobileItem = {

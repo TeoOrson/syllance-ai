@@ -65,9 +65,37 @@ export default function AnalyzePage() {
     }
 
     if (PUBLIC_DEMO_ONLY) {
-      setStatusMessage(
-        "Live AI scoring runs on the conference laptop demo. This public version is for viewing the interface, demo policies, and research pages."
-      );
+      setIsScoring(true);
+      setStatusMessage("Demo mode: generating sample analysis...");
+
+      setTimeout(() => {
+        const fakeScores = {
+          Formality: 3.7,
+          Politeness: 4.0,
+          Affect: 3.6,
+          Strictness: 3.4,
+          Clarity: 4.5,
+          Contestability: 3.8,
+        };
+
+        setScores(fakeScores);
+        setOriginalScores(fakeScores);
+        setAiPolicyText(input);
+        setKeywordsByCategory({
+          Formality: ["academic misconduct", "university procedures"],
+          Politeness: ["please ask", "responsible for checking"],
+          Affect: ["support", "guidance"],
+          Strictness: ["may not use", "must represent"],
+          Clarity: ["when AI is used", "if expectations are unclear"],
+          Contestability: ["ask before using AI", "if you are unsure"],
+        });
+
+        setStatusMessage(
+          "Demo analysis complete. Live AI scoring runs on the conference laptop."
+        );
+        setIsScoring(false);
+      }, 1200);
+
       return;
     }
 
@@ -116,9 +144,49 @@ export default function AnalyzePage() {
     }
 
     if (PUBLIC_DEMO_ONLY) {
-      setStatusMessage(
-        "Live AI rewriting runs on the conference laptop demo. This public version is for viewing the interface, demo policies, and research pages."
-      );
+      setIsRewriting(true);
+      setStatusMessage("Demo mode: generating sample rewrite...");
+      setRewriteMode(mode);
+
+      setTimeout(() => {
+        const fakeRewrite =
+          mode === "autonomy"
+            ? `Students may use generative AI tools to support brainstorming, studying, outlining, and improving clarity in their writing. Final submissions should still reflect the student's own reasoning and understanding. AI should not be used on exams, quizzes, reflections, or assignments where independent work is required. When AI meaningfully contributes to an assignment, students should briefly acknowledge how it was used. If expectations are unclear, students are encouraged to ask before using AI.`
+            : `Students may use generative AI tools for approved learning support, including brainstorming, studying, outlining, debugging, and improving clarity in writing. Students may not use AI on exams, quizzes, reflections, or assignments requiring independent work. Final submissions must reflect the student's own reasoning. AI use must be acknowledged when it meaningfully contributes to submitted work. Students should ask the instructor before using AI if expectations are unclear.`;
+
+        const fakeRewriteScores = {
+          Formality: 3.8,
+          Politeness: 4.1,
+          Affect: 3.9,
+          Strictness: 3.5,
+          Clarity: 4.8,
+          Contestability: 4.0,
+        };
+
+        setRewrite(fakeRewrite);
+        setRewrittenScores(fakeRewriteScores);
+        setRewriteCandidates([
+          {
+            index: 0,
+            rewrite: fakeRewrite,
+            scores: Object.fromEntries(
+              Object.entries(fakeRewriteScores).map(([k, v]) => [
+                k,
+                { score: v },
+              ])
+            ),
+            distance_to_target: 0.4,
+          },
+        ]);
+        setBestRewriteIndex(0);
+        setActivePanel("validation");
+
+        setStatusMessage(
+          "Demo rewrite complete. Live rewrite optimization runs on the conference laptop."
+        );
+        setIsRewriting(false);
+      }, 1200);
+
       return;
     }
 
