@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: Inter, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at 18% 10%, rgba(168,85,247,0.24), transparent 60%),
+    radial-gradient(900px 600px at 82% 15%, rgba(34,211,238,0.18), transparent 55%),
+    linear-gradient(180deg, #05060a 0%, #070811 60%, #070712 100%);
+  color: white;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Main app wrapper */
+.app-content {
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 34px 56px;
+}
+
+/* Mobile fixes */
+@media (max-width: 768px) {
+  .app-content {
+    padding: 18px 16px;
+  }
+
+  h1 {
+    font-size: clamp(42px, 14vw, 64px) !important;
+    letter-spacing: -2px !important;
+  }
+
+  h2 {
+    font-size: clamp(28px, 8vw, 40px) !important;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+
+  button,
+  select {
+    font-size: 14px !important;
+  }
+
+  .desktop-nav,
+  .header-launch {
+    display: none !important;
+  }
+
+  .header-logo {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .header-brand-name {
+    font-size: 30px !important;
+    letter-spacing: -1px !important;
+  }
+
+  .home-hero {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    gap: 28px !important;
+    padding: 34px 0 42px !important;
+  }
+
+  .mission-section {
+    grid-template-columns: 1fr !important;
+  }
+
+  .section-grid,
+  .pipeline-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .analyze-compare-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .radar-mobile-wrap svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  textarea {
+    min-height: 180px !important;
+  }
+
+  .tradeoff-box {
+    grid-template-columns: 1fr !important;
+  }
+
+  .tradeoff-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
