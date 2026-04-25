@@ -52,14 +52,7 @@ export default function Header({ page, setPage }) {
                   <strong>How categories interact</strong>
                   <span>Trade-offs between policy dimensions</span>
                 </button>
-                <button onClick={() => go("about")} style={dropItem}>
-                  <strong>Validation approach</strong>
-                  <span>Rewrite scoring and model comparison</span>
-                </button>
-                <button onClick={() => go("about")} style={dropItem}>
-                  <strong>Teaching implications</strong>
-                  <span>Why policy tone matters</span>
-                </button>
+                
               </div>
             )}
           </div>
@@ -103,12 +96,7 @@ export default function Header({ page, setPage }) {
             <button onClick={() => go("interactions")} style={mobileItem}>
               How categories interact
             </button>
-            <button onClick={() => go("about")} style={mobileItem}>
-              Validation approach
-            </button>
-            <button onClick={() => go("about")} style={mobileItem}>
-              Teaching implications
-            </button>
+            
 
             <button onClick={() => go("analyze")} style={mobileCta}>
               Analyze now
