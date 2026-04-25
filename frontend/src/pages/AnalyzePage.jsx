@@ -66,6 +66,7 @@ export default function AnalyzePage() {
 
     if (PUBLIC_DEMO_ONLY) {
       setIsScoring(true);
+      setLoadingStep(2);
       setStatusMessage("Demo mode: generating sample analysis...");
 
       setTimeout(() => {
@@ -94,6 +95,7 @@ export default function AnalyzePage() {
           "Demo analysis complete. Live AI scoring runs on the conference laptop."
         );
         setIsScoring(false);
+        setLoadingStep(0);
       }, 1200);
 
       return;
@@ -145,6 +147,7 @@ export default function AnalyzePage() {
 
     if (PUBLIC_DEMO_ONLY) {
       setIsRewriting(true);
+      setLoadingStep(3);
       setStatusMessage("Demo mode: generating sample rewrite...");
       setRewriteMode(mode);
 
@@ -170,10 +173,7 @@ export default function AnalyzePage() {
             index: 0,
             rewrite: fakeRewrite,
             scores: Object.fromEntries(
-              Object.entries(fakeRewriteScores).map(([k, v]) => [
-                k,
-                { score: v },
-              ])
+              Object.entries(fakeRewriteScores).map(([k, v]) => [k, { score: v }])
             ),
             distance_to_target: 0.4,
           },
@@ -185,6 +185,7 @@ export default function AnalyzePage() {
           "Demo rewrite complete. Live rewrite optimization runs on the conference laptop."
         );
         setIsRewriting(false);
+        setLoadingStep(0);
       }, 1200);
 
       return;
@@ -353,10 +354,10 @@ export default function AnalyzePage() {
           right={
             <button
               onClick={handleAnalyze}
-              disabled={isScoring || PUBLIC_DEMO_ONLY}
+              disabled={isScoring}
               style={primaryButtonStyle(isScoring)}
             >
-              {PUBLIC_DEMO_ONLY ? "Laptop demo only" : isScoring ? "Analyzing..." : "Analyze"}
+              {isScoring ? "Analyzing..." : "Analyze"}
             </button>
           }
         >
