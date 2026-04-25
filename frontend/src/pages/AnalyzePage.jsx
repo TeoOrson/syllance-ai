@@ -18,29 +18,122 @@ const PUBLIC_DEMO_ONLY =
 const DEMO_POLICIES = [
   {
     name: "Strict policy",
-    text: `Students may not use generative AI tools, including ChatGPT, Copilot, Gemini, or similar systems,
-     unless the instructor gives explicit permission. Unauthorized AI use on assignments, quizzes, exams, reflections,
-      or projects will be treated as academic misconduct. Violations may result in a zero and may be reported through 
-      university academic integrity procedures. If you are unsure whether AI use is allowed, ask before using it.`,
+    text: `Students may not use generative AI tools, including ChatGPT, Copilot, Gemini, or similar systems, unless the instructor gives explicit permission. Unauthorized AI use on assignments, quizzes, exams, reflections, or projects will be treated as academic misconduct. Violations may result in a zero and may be reported through university academic integrity procedures. If you are unsure whether AI use is allowed, ask before using it.`,
+    fakeScores: {
+      Formality: 4.2,
+      Politeness: 2.3,
+      Affect: 2.4,
+      Strictness: 4.7,
+      Clarity: 4.1,
+      Contestability: 2.1,
+    },
+    fakeKeywords: {
+      Formality: ["academic misconduct", "university procedures"],
+      Politeness: ["if you are unsure"],
+      Affect: ["treated as academic misconduct"],
+      Strictness: ["may not use", "violations may result", "zero"],
+      Clarity: ["unless the instructor gives explicit permission"],
+      Contestability: ["ask before using it"],
+    },
+    fakeRewrite: `Students should not use generative AI tools, including ChatGPT, Copilot, Gemini, or similar systems, unless the instructor has clearly allowed them for a specific assignment or activity. Unauthorized AI use may be handled through the course and university academic integrity process. If you are unsure whether AI use is allowed, please ask before using it so expectations are clear.`,
+    fakeRewriteScores: {
+      Formality: 3.8,
+      Politeness: 3.8,
+      Affect: 3.4,
+      Strictness: 3.7,
+      Clarity: 4.6,
+      Contestability: 3.7,
+    },
+    fakeDistance: 0.7,
   },
   {
     name: "Flexible policy",
-    text: `Generative AI tools may be used to support brainstorming, studying, outlining, grammar review, and idea 
-    development. Students are responsible for checking AI-generated content for accuracy and making sure final submissions
-     reflect their own understanding. When AI is used, students should briefly explain how it supported their work. 
-     If you are unsure whether a use is appropriate, please ask for guidance.`,
+    text: `Generative AI tools may be used to support brainstorming, studying, outlining, grammar review, and idea development. Students are responsible for checking AI-generated content for accuracy and making sure final submissions reflect their own understanding. When AI is used, students should briefly explain how it supported their work. If you are unsure whether a use is appropriate, please ask for guidance.`,
+    fakeScores: {
+      Formality: 3.2,
+      Politeness: 4.4,
+      Affect: 4.3,
+      Strictness: 2.5,
+      Clarity: 4.0,
+      Contestability: 4.5,
+    },
+    fakeKeywords: {
+      Formality: ["students are responsible"],
+      Politeness: ["please ask", "guidance"],
+      Affect: ["support", "idea development"],
+      Strictness: ["should briefly explain"],
+      Clarity: ["when AI is used", "checking AI-generated content"],
+      Contestability: ["if you are unsure", "appropriate"],
+    },
+    fakeRewrite: `Generative AI tools may be used to support brainstorming, studying, outlining, grammar review, and idea development. Students remain responsible for checking AI-generated content for accuracy and ensuring that final submissions reflect their own understanding. When AI meaningfully supports an assignment, students should briefly explain how it was used. If a use case is unclear, students are encouraged to ask for guidance before submitting work.`,
+    fakeRewriteScores: {
+      Formality: 3.6,
+      Politeness: 4.2,
+      Affect: 4.1,
+      Strictness: 3.3,
+      Clarity: 4.7,
+      Contestability: 4.1,
+    },
+    fakeDistance: 0.5,
   },
   {
     name: "Balanced policy",
-    text: `Students may use generative AI tools for brainstorming, studying, debugging, outlining, and improving clarity
-     in writing. However, students may not use AI to complete exams, quizzes, reflections, or assignments where independent
-      work is required. Submitted work must represent the student's own reasoning. AI use should be acknowledged when it 
-      meaningfully contributes to an assignment. If expectations are unclear, ask before using AI.`,
+    text: `Students may use generative AI tools for brainstorming, studying, debugging, outlining, and improving clarity in writing. However, students may not use AI to complete exams, quizzes, reflections, or assignments where independent work is required. Submitted work must represent the student's own reasoning. AI use should be acknowledged when it meaningfully contributes to an assignment. If expectations are unclear, ask before using AI.`,
+    fakeScores: {
+      Formality: 3.6,
+      Politeness: 3.6,
+      Affect: 3.5,
+      Strictness: 3.8,
+      Clarity: 4.3,
+      Contestability: 3.5,
+    },
+    fakeKeywords: {
+      Formality: ["submitted work", "independent work"],
+      Politeness: ["if expectations are unclear"],
+      Affect: ["improving clarity", "brainstorming"],
+      Strictness: ["may not use", "must represent"],
+      Clarity: ["AI use should be acknowledged"],
+      Contestability: ["ask before using AI"],
+    },
+    fakeRewrite: `Students may use generative AI tools for brainstorming, studying, debugging, outlining, and improving clarity in writing. AI should not be used to complete exams, quizzes, reflections, or assignments where independent work is required. Submitted work should represent the student's own reasoning and understanding. When AI meaningfully contributes to an assignment, students should acknowledge how it was used. If expectations are unclear, students should ask before using AI.`,
+    fakeRewriteScores: {
+      Formality: 3.7,
+      Politeness: 4.0,
+      Affect: 3.8,
+      Strictness: 3.5,
+      Clarity: 4.8,
+      Contestability: 4.0,
+    },
+    fakeDistance: 0.3,
   },
 ];
 
+function getDemoResult(input, selectedDemoName) {
+  const byName = DEMO_POLICIES.find((p) => p.name === selectedDemoName);
+  if (byName) return byName;
+
+  const byText = DEMO_POLICIES.find((p) => p.text.trim() === input.trim());
+  if (byText) return byText;
+
+  return DEMO_POLICIES[2];
+}
+
+function scoresToRichScores(scores) {
+  return Object.fromEntries(
+    Object.entries(scores).map(([category, score]) => [
+      category,
+      {
+        score,
+        label: "Demo score",
+        confidence: 0.9,
+      },
+    ])
+  );
+}
+
 export default function AnalyzePage() {
   const [input, setInput] = useState("");
+  const [selectedDemoName, setSelectedDemoName] = useState("");
   const [optimizeFor, setOptimizeFor] = useState("autonomy");
   const [runMode, setRunMode] = useState("fast");
   const [activePanel, setActivePanel] = useState("insights");
@@ -67,39 +160,30 @@ export default function AnalyzePage() {
     }
 
     if (PUBLIC_DEMO_ONLY) {
-        setIsScoring(true);
-        setLoadingStep(2);
-        setStatusMessage("Demo mode: generating sample analysis...");
+      setIsScoring(true);
+      setLoadingStep(2);
+      setStatusMessage("Demo mode: generating sample analysis...");
+      setSelectedKeyword("");
+      setRewrite("");
+      setRewrittenScores({});
+      setRewriteMode("");
+      setRewriteCandidates([]);
+      setBestRewriteIndex(null);
 
-        setTimeout(() => {
-          const fakeScores = {
-            Formality: 3.7,
-            Politeness: 4.0,
-            Affect: 3.6,
-            Strictness: 3.4,
-            Clarity: 4.5,
-            Contestability: 3.8,
-          };
+      setTimeout(() => {
+        const demo = getDemoResult(input, selectedDemoName);
 
-          setScores(fakeScores);
-          setOriginalScores(fakeScores);
-          setAiPolicyText(input);
-          setKeywordsByCategory({
-            Formality: ["academic misconduct", "university procedures"],
-            Politeness: ["please ask", "responsible for checking"],
-            Affect: ["support", "guidance"],
-            Strictness: ["may not use", "must represent"],
-            Clarity: ["when AI is used", "if expectations are unclear"],
-            Contestability: ["ask before using AI", "if you are unsure"],
-          });
+        setScores(demo.fakeScores);
+        setOriginalScores(demo.fakeScores);
+        setAiPolicyText(input);
+        setKeywordsByCategory(demo.fakeKeywords || {});
+        setStatusMessage(`Demo analysis complete: ${demo.name}`);
+        setIsScoring(false);
+        setLoadingStep(0);
+      }, 1000);
 
-          setStatusMessage("Demo analysis complete.");
-          setIsScoring(false);
-          setLoadingStep(0);
-        }, 1000);
-
-        return;
-      }
+      return;
+    }
 
     setIsScoring(true);
     setLoadingStep(1);
@@ -135,7 +219,7 @@ export default function AnalyzePage() {
       setStatusMessage("Scoring failed.");
     } finally {
       setIsScoring(false);
-      setLoadingStep(0)
+      setLoadingStep(0);
     }
   }
 
@@ -152,19 +236,9 @@ export default function AnalyzePage() {
       setRewriteMode(mode);
 
       setTimeout(() => {
-        const fakeRewrite =
-          mode === "autonomy"
-            ? `Students may use generative AI tools to support brainstorming, studying, outlining, and improving clarity in their writing. Final submissions should still reflect the student's own reasoning and understanding. AI should not be used on exams, quizzes, reflections, or assignments where independent work is required. When AI meaningfully contributes to an assignment, students should briefly acknowledge how it was used. If expectations are unclear, students are encouraged to ask before using AI.`
-            : `Students may use generative AI tools for approved learning support, including brainstorming, studying, outlining, debugging, and improving clarity in writing. Students may not use AI on exams, quizzes, reflections, or assignments requiring independent work. Final submissions must reflect the student's own reasoning. AI use must be acknowledged when it meaningfully contributes to submitted work. Students should ask the instructor before using AI if expectations are unclear.`;
-
-        const fakeRewriteScores = {
-          Formality: 3.8,
-          Politeness: 4.1,
-          Affect: 3.9,
-          Strictness: 3.5,
-          Clarity: 4.8,
-          Contestability: 4.0,
-        };
+        const demo = getDemoResult(input, selectedDemoName);
+        const fakeRewrite = demo.fakeRewrite;
+        const fakeRewriteScores = demo.fakeRewriteScores;
 
         setRewrite(fakeRewrite);
         setRewrittenScores(fakeRewriteScores);
@@ -172,18 +246,14 @@ export default function AnalyzePage() {
           {
             index: 0,
             rewrite: fakeRewrite,
-            scores: Object.fromEntries(
-              Object.entries(fakeRewriteScores).map(([k, v]) => [k, { score: v }])
-            ),
-            distance_to_target: 0.4,
+            scores: scoresToRichScores(fakeRewriteScores),
+            distance_to_target: demo.fakeDistance,
           },
         ]);
         setBestRewriteIndex(0);
         setActivePanel("validation");
 
-        setStatusMessage(
-          "Demo rewrite complete. Live rewrite optimization runs on the conference laptop."
-        );
+        setStatusMessage(`Demo rewrite complete: ${demo.name}`);
         setIsRewriting(false);
         setLoadingStep(0);
       }, 1200);
@@ -361,29 +431,32 @@ export default function AnalyzePage() {
             </button>
           }
         >
-
           <div style={demoPolicyWrapStyle}>
-          <div style={demoPolicyLabelStyle}>Try a demo policy:</div>
+            <div style={demoPolicyLabelStyle}>Try a demo policy:</div>
 
-          <div style={demoPolicyButtonsStyle}>
-            {DEMO_POLICIES.map((policy) => (
-              <button
-                key={policy.name}
-                onClick={() => {
-                  setInput(policy.text);
-                  setStatusMessage(`Loaded demo: ${policy.name}`);
-                }}
-                style={demoPolicyButtonStyle}
-              >
-                {policy.name}
-              </button>
-            ))}
+            <div style={demoPolicyButtonsStyle}>
+              {DEMO_POLICIES.map((policy) => (
+                <button
+                  key={policy.name}
+                  onClick={() => {
+                    setInput(policy.text);
+                    setSelectedDemoName(policy.name);
+                    setStatusMessage(`Loaded demo: ${policy.name}`);
+                  }}
+                  style={demoPolicyButtonStyle}
+                >
+                  {policy.name}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setSelectedDemoName("");
+            }}
             placeholder="Paste your syllabus here..."
             style={largeTextareaStyle}
           />
