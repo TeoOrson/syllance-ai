@@ -18,6 +18,8 @@ def nearest_anchor_label(category, score):
 
 
 def build_score_prompt(policy_text: str, optimize_for: str):
+    # optimize_for is intentionally unused here — scoring is mode-agnostic and measures
+    # where the policy actually sits on each dimension. Only the rewrite step uses this.
     system = (
         "You are an expert evaluator acting as an AI-as-a-judge for syllabus AI policy language. "
         "Your job is to apply the provided rubric consistently. "
@@ -79,9 +81,9 @@ Strictness:
 Clarity:
 1 = Unclear
 2 = Ambiguous
-3 = Understandable
+3 = Moderately clear
 4 = Clear
-5 = Extremely clear
+5 = Highly clear
 
 Contestability:
 1 = Non-negotiable

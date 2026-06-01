@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 
 from app.services.scorer import score_ai_policy
 from app.services.validator import validate_score_ai_policy
+from app.services.llm_client import PRIMARY_MODEL, VALIDATION_MODEL
 
 router = APIRouter()
 
@@ -19,7 +20,7 @@ def score_policy(req: ScorePolicyRequest):
 
     if not policy_text:
         return {
-            "version": "policypulse-v1",
+            "version": "syllance-v1",
             "status": "no_input",
             "message": "No policy text provided.",
             "input_meta": {
@@ -43,7 +44,7 @@ def score_policy(req: ScorePolicyRequest):
         validation = validate_score_ai_policy(policy_text, req.optimizeFor)
 
         return {
-            "version": "policypulse-v1",
+            "version": "syllance-v1",
             "status": "ok",
             "message": "Policy scored directly.",
             "input_meta": {
@@ -52,16 +53,16 @@ def score_policy(req: ScorePolicyRequest):
             },
             "ai_policy_text": policy_text,
             "primary": {
-                **primary, "model": "qwen2.5-coder:7b"
+                **primary, "model": PRIMARY_MODEL
             },
             "validation": {
                 **validation,
-                "model": "gemma4"
+                "model": VALIDATION_MODEL
             }
         }
     except Exception as e:
         return {
-            "version": "policypulse-v1",
+            "version": "syllance-v1",
             "status": "score_failed",
             "message": f"Direct scoring failed: {repr(e)}",
             "input_meta": {

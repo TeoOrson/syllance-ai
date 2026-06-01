@@ -12,6 +12,7 @@ def validate_score_ai_policy(policy_text: str, optimize_for: str) -> dict:
         model=VALIDATION_MODEL,
         temperature=0.2,
         timeout=240,
+        num_predict=2000,
     )
 
     print("\n--- VALIDATOR (SECOND MODEL) ---")

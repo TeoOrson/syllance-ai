@@ -52,10 +52,10 @@ export const CATEGORY_ANCHORS = {
 
   Contestability: [
     "Non-negotiable",
-    "Limited Discretion",
-    "Conditional",
-    "Interpretable",
-    "Negotiable",
+    "Limited Flexibility",
+    "Moderate",
+    "Fair + transparent",
+    "Overly flexible",
   ],
 };
 
