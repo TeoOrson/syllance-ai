@@ -3,8 +3,14 @@ import re
 from app.services.llm_client import ollama_chat, PRIMARY_MODEL
 
 
+def strip_thinking(text: str) -> str:
+    # Qwen3 and similar models emit <think>...</think> blocks before JSON output.
+    # Strip them so the parser finds the actual response.
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+
 def extract_json_block(text: str) -> str:
-    text = (text or "").strip()
+    text = strip_thinking((text or "").strip())
 
     # fenced ```json ... ```
     fence = re.search(r"```(?:json)?\s*(\{.*\})\s*```", text, flags=re.DOTALL | re.IGNORECASE)

@@ -160,8 +160,8 @@ Field rules:
 - label must match the closest rubric anchor
 - confidence must be a number from 0.0 to 1.0
 - reasoning should be 1 concise sentence
-- evidence should contain 1–3 exact phrases from the policy
-- keywords_by_category must contain only exact phrases from the policy
+- evidence should contain 1–3 short verbatim phrases (2–8 words) copied exactly from the policy text
+- keywords_by_category must contain only short trigger words or phrases (2–6 words) from the policy that are most significant for that category — NOT full sentences
 
 AI POLICY TEXT:
 \"\"\"{policy_text}\"\"\"
@@ -212,47 +212,28 @@ def score_ai_policy(policy_text: str, optimize_for: str) -> dict:
             "confidence": round(confidence, 2),
         }
 
-    raw_evidence = out.get("evidence", [])
-    if not isinstance(raw_evidence, list):
-        raw_evidence = []
-
+    # Evidence lives inside each score object (where the model puts it per the prompt template)
     cleaned_evidence = []
     policy_lower = policy_text.lower()
 
-    for item in raw_evidence[:80]:
-        if not isinstance(item, dict):
+    for category in CATEGORIES:
+        raw_obj = raw_scores.get(category, {})
+        cat_evidence = raw_obj.get("evidence", [])
+        if not isinstance(cat_evidence, list):
             continue
-
-        category = item.get("category")
-        if category not in CATEGORIES:
-            continue
-
-        phrase = str(item.get("phrase", "")).strip()[:80]
-        quote = str(item.get("quote", "")).strip()[:400]
-
-        start = -1
-        end = -1
-
-        if quote and quote.lower() in policy_lower:
-            idx = policy_lower.find(quote.lower())
-            if idx != -1:
-                start = idx
-                end = idx + len(quote)
-
-        if start == -1 and phrase and phrase.lower() in policy_lower:
+        for phrase in cat_evidence[:3]:
+            phrase = str(phrase).strip()
+            if not phrase:
+                continue
             idx = policy_lower.find(phrase.lower())
-            if idx != -1:
-                start = idx
-                end = idx + len(phrase)
-
-        cleaned_evidence.append({
-            "category": category,
-            "phrase": phrase,
-            "quote": quote,
-            "start": max(0, start),
-            "end": max(0, end),
-            "trigger": str(item.get("trigger", "")).strip()[:60],
-        })
+            cleaned_evidence.append({
+                "category": category,
+                "phrase": phrase[:80],
+                "quote": phrase[:400],
+                "start": max(0, idx) if idx != -1 else 0,
+                "end": max(0, idx + len(phrase)) if idx != -1 else 0,
+                "trigger": "",
+            })
 
     keywords_by_category = out.get("keywords_by_category", {})
     if not isinstance(keywords_by_category, dict):
