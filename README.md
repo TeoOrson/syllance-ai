@@ -161,7 +161,7 @@ Used for:
 
 ## Validation Model
 
-- `qwen3.5:9b`
+- `llama3.1:8b`
 
 Used for:
 
@@ -224,7 +224,7 @@ Features:
 
 ```bash
 ollama pull gemma4:e4b
-ollama pull qwen3.5:9b
+ollama pull llama3.1:8b
 ```
 
 ---
