@@ -1,0 +1,7 @@
+dimension,n,exact,exact_pct,within_1,within_1_pct,off_by_2,off_by_2_pct,major,major_pct,llm_over_pct,llm_under_pct,mean_signed_diff,bias_direction
+Formality,45,20,44.4,26,57.8,17,37.8,2,4.4,64.4,24.4,0.71,over
+Politeness,45,33,73.3,39,86.7,5,11.1,1,2.2,46.7,33.3,0.25,over
+Affect,45,18,40.0,32,71.1,9,20.0,4,8.9,40.0,42.2,0.14,neutral
+Strictness,45,25,55.6,33,73.3,11,24.4,1,2.2,57.8,24.4,0.36,over
+Clarity,45,11,24.4,16,35.6,20,44.4,9,20.0,95.6,0.0,1.78,over
+Contestability,45,17,37.8,26,57.8,16,35.6,3,6.7,73.3,17.8,0.87,over

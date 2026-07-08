@@ -1,0 +1,46 @@
+ID,discipline,stratum,Formality_llm,Formality_human,Formality_diff,Formality_band,Formality_bias,Politeness_llm,Politeness_human,Politeness_diff,Politeness_band,Politeness_bias,Affect_llm,Affect_human,Affect_diff,Affect_band,Affect_bias,Strictness_llm,Strictness_human,Strictness_diff,Strictness_band,Strictness_bias,Clarity_llm,Clarity_human,Clarity_diff,Clarity_band,Clarity_bias,Contestability_llm,Contestability_human,Contestability_diff,Contestability_band,Contestability_bias
+P163,Social Work (Masters level),B3_reviewed,3.5,4.0,-0.5,exact,under,3.5,2.5,1.0,off_by_1,over,3.8,4.0,-0.2,exact,under,3.2,3.0,0.2,exact,over,4.8,4.0,0.8,off_by_1,over,3.7,2.5,1.2,off_by_1,over
+P180,Writing,B3_reviewed,2.5,2.0,0.5,exact,over,1.5,1.5,0.0,exact,match,2.5,1.5,1.0,off_by_1,over,4.0,4.0,0.0,exact,match,4.5,2.0,2.5,off_by_2,over,2.5,1.0,1.5,off_by_2,over
+P211,Writing Center,B3_reviewed,3.5,4.0,-0.5,exact,under,2.5,3.0,-0.5,exact,under,2.0,2.0,0.0,exact,match,3.5,4.0,-0.5,exact,under,4.5,2.0,2.5,off_by_2,over,3.5,1.5,2.0,off_by_2,over
+P151,Research,B3_reviewed,4.0,3.0,1.0,off_by_1,over,2.5,2.0,0.5,exact,over,3.8,2.5,1.3,off_by_1,over,4.5,4.0,0.5,exact,over,4.5,2.5,2.0,off_by_2,over,2.5,1.5,1.0,off_by_1,over
+P158,Research Methods,B3_reviewed,3.5,4.0,-0.5,exact,under,2.5,2.0,0.5,exact,over,2.8,3.0,-0.2,exact,under,4.5,4.0,0.5,exact,over,4.5,4.0,0.5,exact,over,3.5,2.0,1.5,off_by_2,over
+P147,Public Policy,B3_reviewed,3.5,4.0,-0.5,exact,under,3.5,3.0,0.5,exact,over,2.5,5.0,-2.5,off_by_2,under,3.5,4.0,-0.5,exact,under,4.5,4.0,0.5,exact,over,3.0,2.5,0.5,exact,over
+P204,Writing,B3_reviewed,3.5,4.0,-0.5,exact,under,2.0,2.0,0.0,exact,match,2.0,4.0,-2.0,off_by_2,under,5.0,3.5,1.5,off_by_2,over,5.0,3.0,2.0,off_by_2,over,1.0,1.0,0.0,exact,match
+P173,Writing,fresh,4.0,2.5,1.5,off_by_2,over,2.5,2.0,0.5,exact,over,2.0,2.0,0.0,exact,match,4.5,5.0,-0.5,exact,under,3.5,3.0,0.5,exact,over,2.0,1.0,1.0,off_by_1,over
+P029,Criminal Justice,fresh,3.5,2.0,1.5,off_by_2,over,2.5,1.5,1.0,off_by_1,over,2.0,1.0,1.0,off_by_1,over,4.5,3.5,1.0,off_by_1,over,5.0,2.5,2.5,off_by_2,over,3.0,1.5,1.5,off_by_2,over
+P154,Research Methods,B3_reviewed,4.5,4.0,0.5,exact,over,2.5,3.0,-0.5,exact,under,2.0,4.0,-2.0,off_by_2,under,4.5,3.0,1.5,off_by_2,over,4.8,3.0,1.8,off_by_2,over,2.5,1.5,1.0,off_by_1,over
+P181,Writing,fresh,3.5,5.0,-1.5,off_by_2,under,4.5,3.0,1.5,off_by_2,over,4.0,1.0,3.0,major,over,2.5,4.0,-1.5,off_by_2,under,3.0,2.5,0.5,exact,over,3.0,1.0,2.0,off_by_2,over
+P071,Health,fresh,3.5,4.0,-0.5,exact,under,2.5,2.5,0.0,exact,match,2.7,3.5,-0.8,off_by_1,under,4.5,4.0,0.5,exact,over,4.8,2.0,2.8,major,over,2.8,1.0,1.8,off_by_2,over
+P160,Social Sciences,fresh,3.0,3.5,-0.5,exact,under,3.0,3.0,0.0,exact,match,3.0,3.0,0.0,exact,match,2.0,1.0,1.0,off_by_1,over,4.0,1.0,3.0,major,over,1.0,1.0,0.0,exact,match
+P075,History,fresh,2.5,2.0,0.5,exact,over,2.5,3.0,-0.5,exact,under,2.0,4.0,-2.0,off_by_2,under,3.5,3.0,0.5,exact,over,4.5,3.0,1.5,off_by_2,over,2.5,2.0,0.5,exact,over
+P146,Psychology,B3_reviewed,4.0,3.0,1.0,off_by_1,over,2.0,3.5,-1.5,off_by_2,under,2.0,3.5,-1.5,off_by_2,under,5.0,3.0,2.0,off_by_2,over,5.0,4.5,0.5,exact,over,3.0,1.5,1.5,off_by_2,over
+P041,Education,fresh,5.0,3.0,2.0,off_by_2,over,2.0,2.5,-0.5,exact,under,2.0,2.0,0.0,exact,match,5.0,3.5,1.5,off_by_2,over,4.5,2.0,2.5,off_by_2,over,1.5,1.0,0.5,exact,over
+P143,Politics,B3_reviewed,3.5,2.5,1.0,off_by_1,over,2.5,2.5,0.0,exact,match,2.0,2.0,0.0,exact,match,3.5,4.0,-0.5,exact,under,4.5,2.5,2.0,off_by_2,over,2.0,1.0,1.0,off_by_1,over
+P201,Writing,B3_reviewed,3.0,3.0,0.0,exact,match,2.5,3.0,-0.5,exact,under,2.0,2.5,-0.5,exact,under,4.0,4.0,0.0,exact,match,5.0,2.5,2.5,off_by_2,over,2.0,1.0,1.0,off_by_1,over
+P141,Physical Sciences,B3_reviewed,2.5,2.0,0.5,exact,over,3.5,4.0,-0.5,exact,under,2.5,2.5,0.0,exact,match,3.5,3.0,0.5,exact,over,4.5,2.0,2.5,off_by_2,over,2.5,4.0,-1.5,off_by_2,under
+P188,Writing,B3_reviewed,4.5,3.5,1.0,off_by_1,over,3.5,2.5,1.0,off_by_1,over,3.0,2.5,0.5,exact,over,4.5,3.0,1.5,off_by_2,over,4.8,2.5,2.3,off_by_2,over,2.5,4.0,-1.5,off_by_2,under
+P159,Research Methods,B3_reviewed,2.5,2.5,0.0,exact,match,4.2,4.0,0.2,exact,over,4.8,3.5,1.3,off_by_1,over,3.5,3.5,0.0,exact,match,5.0,4.0,1.0,off_by_1,over,4.0,4.0,0.0,exact,match
+P167,Spanish,B3_reviewed,2.5,2.0,0.5,exact,over,4.5,2.5,2.0,off_by_2,over,4.8,2.0,2.8,major,over,4.2,4.0,0.2,exact,over,4.8,2.0,2.8,major,over,3.5,4.5,-1.0,off_by_1,under
+P156,Research Methods,B3_reviewed,4.0,4.0,0.0,exact,match,2.5,2.0,0.5,exact,over,2.0,1.5,0.5,exact,over,4.5,4.5,0.0,exact,match,5.0,2.0,3.0,major,over,1.5,1.0,0.5,exact,over
+P197,Writing,fresh,2.8,1.0,1.8,off_by_2,over,3.5,2.0,1.5,off_by_2,over,4.5,1.0,3.5,major,over,3.8,4.0,-0.2,exact,under,4.8,1.5,3.3,major,over,4.2,1.0,3.2,major,over
+P078,History,fresh,2.7,1.0,1.7,off_by_2,over,2.3,2.5,-0.2,exact,under,1.8,1.5,0.3,exact,over,4.8,5.0,-0.2,exact,under,3.5,1.5,2.0,off_by_2,over,1.2,1.0,0.2,exact,over
+P026,Computer Sciences,fresh,4.5,3.0,1.5,off_by_2,over,2.5,3.0,-0.5,exact,under,1.5,2.0,-0.5,exact,under,4.8,4.0,0.8,off_by_1,over,4.5,1.0,3.5,major,over,1.5,1.0,0.5,exact,over
+P196,Writing,B3_reviewed,3.5,2.0,1.5,off_by_2,over,2.5,3.0,-0.5,exact,under,2.0,4.0,-2.0,off_by_2,under,4.5,3.0,1.5,off_by_2,over,4.8,4.0,0.8,off_by_1,over,1.5,2.0,-0.5,exact,under
+P203,Writing,B3_reviewed,3.5,2.0,1.5,off_by_2,over,2.5,2.0,0.5,exact,over,2.0,2.0,0.0,exact,match,4.5,5.0,-0.5,exact,under,4.0,2.0,2.0,off_by_2,over,2.0,3.0,-1.0,off_by_1,under
+P142,Physical Sciences,B3_reviewed,4.5,1.0,3.5,major,over,2.0,2.0,0.0,exact,match,1.5,1.0,0.5,exact,over,5.0,4.5,0.5,exact,over,4.5,1.5,3.0,major,over,1.5,2.5,-1.0,off_by_1,under
+P164,Sociology,B3_reviewed,3.0,1.5,1.5,off_by_2,over,2.0,2.0,0.0,exact,match,2.0,1.0,1.0,off_by_1,over,3.5,4.5,-1.0,off_by_1,under,4.5,1.0,3.5,major,over,3.5,1.0,2.5,off_by_2,over
+P062,First Year Seminar,fresh,3.5,2.0,1.5,off_by_2,over,3.5,3.5,0.0,exact,match,4.5,3.5,1.0,off_by_1,over,3.5,2.5,1.0,off_by_1,over,4.5,3.0,1.5,off_by_2,over,3.5,4.0,-0.5,exact,under
+P101,Languages,fresh,3.5,3.0,0.5,exact,over,3.5,3.0,0.5,exact,over,2.5,3.5,-1.0,off_by_1,under,3.5,3.5,0.0,exact,match,4.5,2.0,2.5,off_by_2,over,2.5,1.0,1.5,off_by_2,over
+P083,Honors Course,fresh,3.5,2.0,1.5,off_by_2,over,4.5,4.0,0.5,exact,over,5.0,4.0,1.0,off_by_1,over,2.5,2.5,0.0,exact,match,3.0,3.0,0.0,exact,match,4.0,3.5,0.5,exact,over
+P148,Religious Studies,fresh,2.5,1.0,1.5,off_by_2,over,3.5,4.0,-0.5,exact,under,2.5,3.5,-1.0,off_by_1,under,2.5,2.5,0.0,exact,match,4.5,4.5,0.0,exact,match,3.5,4.0,-0.5,exact,under
+P144,Psychology,B3_reviewed,4.5,1.0,3.5,major,over,2.5,1.5,1.0,off_by_1,over,1.5,1.5,0.0,exact,match,5.0,4.0,1.0,off_by_1,over,4.8,1.5,3.3,major,over,1.5,1.0,0.5,exact,over
+P002,Anthropology,fresh,1.0,1.0,0.0,exact,match,4.5,1.0,3.5,major,over,5.0,1.0,4.0,major,over,1.0,5.0,-4.0,major,under,3.5,3.0,0.5,exact,over,4.5,1.0,3.5,major,over
+P087,Information Technology,fresh,3.5,2.5,1.0,off_by_1,over,4.5,3.0,1.5,off_by_2,over,4.8,2.5,2.3,off_by_2,over,3.5,4.0,-0.5,exact,under,4.8,3.0,1.8,off_by_2,over,3.8,1.0,2.8,major,over
+P096,Interdisciplinary,fresh,2.5,3.0,-0.5,exact,under,4.5,4.0,0.5,exact,over,4.0,5.0,-1.0,off_by_1,under,2.5,1.5,1.0,off_by_1,over,4.5,4.0,0.5,exact,over,3.5,1.0,2.5,off_by_2,over
+P210,Writing,B3_reviewed,4.5,4.0,0.5,exact,over,2.5,3.6,-1.1,off_by_1,under,2.0,3.0,-1.0,off_by_1,under,4.8,3.0,1.8,off_by_2,over,4.8,3.5,1.3,off_by_1,over,3.5,1.0,2.5,off_by_2,over
+P018,Composition,fresh,3.5,4.5,-1.0,off_by_1,under,3.5,4.0,-0.5,exact,under,3.5,5.0,-1.5,off_by_2,under,4.5,3.0,1.5,off_by_2,over,4.5,4.0,0.5,exact,over,2.5,1.0,1.5,off_by_2,over
+P184,Writing,fresh,3.5,1.0,2.5,off_by_2,over,3.5,2.5,1.0,off_by_1,over,4.5,2.0,2.5,off_by_2,over,4.5,4.0,0.5,exact,over,3.5,2.0,1.5,off_by_2,over,3.5,1.0,2.5,off_by_2,over
+P177,Writing,B3_reviewed,4.5,4.5,0.0,exact,match,2.5,3.0,-0.5,exact,under,2.8,3.0,-0.2,exact,under,4.5,3.0,1.5,off_by_2,over,4.8,4.0,0.8,off_by_1,over,1.5,1.5,0.0,exact,match
+P013,Business,fresh,3.5,2.0,1.5,off_by_2,over,2.5,3.0,-0.5,exact,under,3.5,4.5,-1.0,off_by_1,under,4.5,3.0,1.5,off_by_2,over,4.8,4.5,0.3,exact,over,2.5,1.0,1.5,off_by_2,over
+P095,Interdisciplinary,fresh,4.5,3.0,1.5,off_by_2,over,2.5,2.0,0.5,exact,over,1.5,1.0,0.5,exact,over,4.8,4.0,0.8,off_by_1,over,3.5,1.0,2.5,off_by_2,over,1.5,1.0,0.5,exact,over
+P074,History,fresh,2.5,4.0,-1.5,off_by_2,under,2.0,2.0,0.0,exact,match,1.5,2.5,-1.0,off_by_1,under,4.5,4.5,0.0,exact,match,3.5,1.0,2.5,off_by_2,over,1.5,1.0,0.5,exact,over
