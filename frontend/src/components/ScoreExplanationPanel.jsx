@@ -15,7 +15,7 @@ const DEFAULT_OPEN = new Set(["Clarity", "Contestability"]);
 
 export default function ScoreExplanationPanel({ scores }) {
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div className="grid gap-3">
       {CATEGORIES.map((category) => {
         const score = scores?.[category];
         const target = CATEGORY_TARGETS[category];
@@ -28,31 +28,15 @@ export default function ScoreExplanationPanel({ scores }) {
           <details
             key={category}
             open={DEFAULT_OPEN.has(category)}
-            style={{
-              borderRadius: 14,
-              border: "1px solid rgba(255,255,255,0.10)",
-              background: "rgba(255,255,255,0.03)",
-              padding: 12,
-            }}
+            className="rounded-lg border border-border bg-card p-3"
           >
-            <summary
-              style={{
-                cursor: "pointer",
-                fontWeight: 900,
-                color: "rgba(255,255,255,0.92)",
-              }}
-            >
+            <summary className="cursor-pointer font-black text-foreground/92">
               {category}: {formatScore(score)}/5 · Target: {formatScore(target)}
               {tierMeta && (
                 <span
                   title={`${tierMeta.label} — human/LLM validation study`}
-                  style={{
-                    marginLeft: 8,
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: "1px",
-                    color: tierMeta.color,
-                  }}
+                  className="ml-2 text-[11px] font-bold tracking-widest"
+                  style={{ color: tierMeta.color }}
                 >
                   {"●".repeat(tierMeta.dots)}
                   {"○".repeat(3 - tierMeta.dots)} {tierMeta.label}
@@ -60,16 +44,7 @@ export default function ScoreExplanationPanel({ scores }) {
               )}
             </summary>
 
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gap: 8,
-                fontSize: 13,
-                lineHeight: 1.55,
-                color: "rgba(255,255,255,0.78)",
-              }}
-            >
+            <div className="mt-2.5 grid gap-2 text-[13px] leading-relaxed text-foreground/78">
               <div>
                 <strong>Status:</strong>{" "}
                 {comparison?.status === "on"
@@ -99,12 +74,8 @@ export default function ScoreExplanationPanel({ scores }) {
 
               {reliability && (
                 <div
-                  style={{
-                    marginTop: 4,
-                    paddingTop: 8,
-                    borderTop: "1px solid rgba(255,255,255,0.08)",
-                    color: tierMeta?.color,
-                  }}
+                  className="mt-1 border-t border-border pt-2"
+                  style={{ color: tierMeta?.color }}
                 >
                   <strong>Reliability:</strong> {reliability.caveat}
                 </div>

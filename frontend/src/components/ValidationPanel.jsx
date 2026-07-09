@@ -1,6 +1,13 @@
 import React from "react";
 import { CATEGORIES, CATEGORY_TARGETS } from "../data/categories";
-import { getScoreComparison } from "../utils/scoreUtils";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "./ui/table";
 
 function formatValue(value) {
   return typeof value === "number" ? value.toFixed(1) : "-";
@@ -17,6 +24,13 @@ function getDistanceToTarget(score, target) {
   return Math.abs(score - target);
 }
 
+const CLOSER_COLOR = {
+  yes: "text-emerald-400",
+  no: "text-red-400",
+  same: "text-amber-400",
+  none: "text-foreground/70",
+};
+
 export default function ValidationPanel({
   originalScores,
   rewrittenScores,
@@ -24,13 +38,7 @@ export default function ValidationPanel({
 }) {
   if (!rewrittenScores || Object.keys(rewrittenScores).length === 0) {
     return (
-      <div
-        style={{
-          fontSize: 13,
-          color: "rgba(255,255,255,0.65)",
-          lineHeight: 1.6,
-        }}
-      >
+      <div className="text-[13px] leading-relaxed text-foreground/65">
         Generate and score a rewrite to validate whether it moves the policy in
         the intended direction.
       </div>
@@ -38,44 +46,25 @@ export default function ValidationPanel({
   }
 
   return (
-    <div style={{ display: "grid", gap: 10 }}>
-      <div
-        style={{
-          fontSize: 13,
-          color: "rgba(255,255,255,0.82)",
-          lineHeight: 1.6,
-        }}
-      >
+    <div className="grid gap-2.5">
+      <div className="text-[13px] leading-relaxed text-foreground/82">
         <strong>Validation mode:</strong> {rewriteMode}
       </div>
 
-      <div
-        style={{
-          overflowX: "auto",
-          borderRadius: 14,
-          border: "1px solid rgba(255,255,255,0.10)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontSize: 12,
-          }}
-        >
-          <thead>
-            <tr style={{ background: "rgba(255,255,255,0.05)" }}>
-              <th style={thStyle}>Category</th>
-              <th style={thStyle}>Target</th>
-              <th style={thStyle}>Original</th>
-              <th style={thStyle}>Rewrite</th>
-              <th style={thStyle}>Δ Score</th>
-              <th style={thStyle}>Closer to Target?</th>
-            </tr>
-          </thead>
+      <div className="rounded-lg border border-border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-white/5">
+              <TableHead>Category</TableHead>
+              <TableHead>Target</TableHead>
+              <TableHead>Original</TableHead>
+              <TableHead>Rewrite</TableHead>
+              <TableHead>Δ Score</TableHead>
+              <TableHead>Closer to Target?</TableHead>
+            </TableRow>
+          </TableHeader>
 
-          <tbody>
+          <TableBody>
             {CATEGORIES.map((category) => {
               const target = CATEGORY_TARGETS[category];
               const original = originalScores?.[category] ?? null;
@@ -90,59 +79,36 @@ export default function ValidationPanel({
               const rewrittenDistance = getDistanceToTarget(rewritten, target);
 
               let closerText = "—";
-              let closerColor = "rgba(255,255,255,0.70)";
+              let closerKey = "none";
 
-              if (
-                originalDistance !== null &&
-                rewrittenDistance !== null
-              ) {
+              if (originalDistance !== null && rewrittenDistance !== null) {
                 if (rewrittenDistance < originalDistance) {
                   closerText = "Yes";
-                  closerColor = "#34d399";
+                  closerKey = "yes";
                 } else if (rewrittenDistance > originalDistance) {
                   closerText = "No";
-                  closerColor = "#f87171";
+                  closerKey = "no";
                 } else {
                   closerText = "No change";
-                  closerColor = "#fbbf24";
+                  closerKey = "same";
                 }
               }
               return (
-                <tr
-                  key={category}
-                  style={{
-                    borderTop: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                >
-                  <td style={tdStyle}>{category}</td>
-                  <td style={tdStyle}>{formatValue(target)}</td>
-                  <td style={tdStyle}>{formatValue(original) ?? "—"}</td>
-                  <td style={tdStyle}>{formatValue(rewritten) ?? "—"}</td>
-                  <td style={tdStyle}>
-                    {delta === null ? "—" : formatDelta(delta)}
-                  </td>
-                  <td style={{ ...tdStyle, color: closerColor, fontWeight: 800 }}>
+                <TableRow key={category}>
+                  <TableCell>{category}</TableCell>
+                  <TableCell>{formatValue(target)}</TableCell>
+                  <TableCell>{formatValue(original)}</TableCell>
+                  <TableCell>{formatValue(rewritten)}</TableCell>
+                  <TableCell>{delta === null ? "—" : formatDelta(delta)}</TableCell>
+                  <TableCell className={`font-extrabold ${CLOSER_COLOR[closerKey]}`}>
                     {closerText}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
 }
-
-const thStyle = {
-  textAlign: "left",
-  padding: "10px 12px",
-  fontSize: 12,
-  fontWeight: 900,
-  color: "rgba(255,255,255,0.90)",
-};
-
-const tdStyle = {
-  padding: "10px 12px",
-  color: "rgba(255,255,255,0.82)",
-};

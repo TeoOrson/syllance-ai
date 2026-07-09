@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import Card from "../shared/CardShim";
+import { Card, CardHeader, CardTitle, CardAction, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Textarea } from "../components/ui/textarea";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import LoadingBar from "../components/LoadingBar";
 import RadarChart from "../components/RadarChart";
 import KeywordPanel from "../components/KeywordPanel";
@@ -137,7 +148,6 @@ export default function AnalyzePage() {
   const [optimizeFor, setOptimizeFor] = useState("autonomy");
   const [runMode, setRunMode] = useState("fast");
   const [activePanel, setActivePanel] = useState("insights");
-  const [loadingStep, setLoadingStep] = useState(0);
 
   const [isScoring, setIsScoring] = useState(false);
   const [isRewriting, setIsRewriting] = useState(false);
@@ -161,7 +171,6 @@ export default function AnalyzePage() {
 
     if (PUBLIC_DEMO_ONLY) {
       setIsScoring(true);
-      setLoadingStep(2);
       setStatusMessage("Demo mode: generating sample analysis...");
       setSelectedKeyword("");
       setRewrite("");
@@ -179,14 +188,12 @@ export default function AnalyzePage() {
         setKeywordsByCategory(demo.fakeKeywords || {});
         setStatusMessage(`Demo analysis complete: ${demo.name}`);
         setIsScoring(false);
-        setLoadingStep(0);
       }, 1000);
 
       return;
     }
 
     setIsScoring(true);
-    setLoadingStep(1);
     setStatusMessage("");
     setSelectedKeyword("");
     setRewrite("");
@@ -196,7 +203,6 @@ export default function AnalyzePage() {
     setBestRewriteIndex(null);
 
     try {
-      setLoadingStep(2);
       const out = await scorePolicy(input, optimizeFor);
 
       if (out.status !== "ok") {
@@ -219,7 +225,6 @@ export default function AnalyzePage() {
       setStatusMessage("Scoring failed.");
     } finally {
       setIsScoring(false);
-      setLoadingStep(0);
     }
   }
 
@@ -231,7 +236,6 @@ export default function AnalyzePage() {
 
     if (PUBLIC_DEMO_ONLY) {
       setIsRewriting(true);
-      setLoadingStep(3);
       setStatusMessage("Demo mode: generating sample rewrite...");
       setRewriteMode(mode);
 
@@ -255,14 +259,12 @@ export default function AnalyzePage() {
 
         setStatusMessage(`Demo rewrite complete: ${demo.name}`);
         setIsRewriting(false);
-        setLoadingStep(0);
       }, 1200);
 
       return;
     }
 
     setIsRewriting(true);
-    setLoadingStep(3);
     setStatusMessage("");
     setRewriteMode(mode);
 
@@ -296,7 +298,6 @@ export default function AnalyzePage() {
       setStatusMessage("Rewrite optimization failed.");
     } finally {
       setIsRewriting(false);
-      setLoadingStep(0);
     }
   }
 
@@ -310,7 +311,7 @@ export default function AnalyzePage() {
     return (
       <>
         {text.slice(0, i)}
-        <mark style={markStyle}>
+        <mark className="rounded-[5px] bg-brand-cyan/30 px-1 text-foreground">
           {text.slice(i, i + highlight.length)}
         </mark>
         {text.slice(i + highlight.length)}
@@ -318,76 +319,30 @@ export default function AnalyzePage() {
     );
   }
 
-  function renderActivePanel() {
-    if (activePanel === "insights") {
-      return <ScoreExplanationPanel scores={scores} />;
-    }
-
-    if (activePanel === "keywords") {
-      return (
-        <div style={{ display: "grid", gap: 16 }}>
-          <KeywordPanel
-            keywordsByCategory={keywordsByCategory}
-            selectedKeyword={selectedKeyword}
-            setSelectedKeyword={setSelectedKeyword}
-          />
-          <KeywordExplanationPanel keywordsByCategory={keywordsByCategory} />
-        </div>
-      );
-    }
-
-    if (activePanel === "candidates") {
-      return (
-        <RewriteCandidatesPanel
-          candidates={rewriteCandidates}
-          bestIndex={bestRewriteIndex}
-        />
-      );
-    }
-
-    if (activePanel === "validation") {
-      return (
-        <div style={{ display: "grid", gap: 16 }}>
-          <ValidationPanel
-            originalScores={originalScores}
-            rewrittenScores={rewrittenScores}
-            rewriteMode={rewriteMode}
-          />
-          <RewriteExplanationPanel
-            originalScores={originalScores}
-            rewrittenScores={rewrittenScores}
-            candidates={rewriteCandidates}
-            bestIndex={bestRewriteIndex}
-          />
-        </div>
-      );
-    }
-
-    return null;
-  }
-
   return (
-    <div style={{ fontSize: 17 }}>
-      <section style={topBarStyle}>
-        <select
-          value={optimizeFor}
-          onChange={(e) => setOptimizeFor(e.target.value)}
-          style={selectStyle}
-        >
-          <option value="autonomy">Optimize: Autonomy</option>
-          <option value="enforcement">Optimize: Enforcement</option>
-        </select>
+    <div className="text-[17px]">
+      <section className="mt-3.5 flex flex-wrap items-center gap-3">
+        <Select value={optimizeFor} onValueChange={setOptimizeFor}>
+          <SelectTrigger className="font-bold">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="autonomy">Optimize: Autonomy</SelectItem>
+            <SelectItem value="enforcement">Optimize: Enforcement</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <select
-          value={runMode}
-          onChange={(e) => setRunMode(e.target.value)}
-          style={selectStyle}
-        >
-          <option value="fast">Fast mode</option>
-          <option value="research">Research mode</option>
-        </select>
+        <Select value={runMode} onValueChange={setRunMode}>
+          <SelectTrigger className="font-bold">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="fast">Fast mode</SelectItem>
+            <SelectItem value="research">Research mode</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div style={topHelpTextStyle}>
+        <div className="text-sm font-semibold text-foreground/62">
           Analyze the AI policy, compare the original text with an optimized rewrite, then review supporting evidence.
         </div>
       </section>
@@ -403,338 +358,184 @@ export default function AnalyzePage() {
         }
       />
 
-      {statusMessage && <div style={statusStyle}>{statusMessage}</div>}
+      {statusMessage && (
+        <div className="mt-3 rounded-lg border border-border bg-card px-3 py-2.5 text-sm font-semibold text-foreground/82">
+          {statusMessage}
+        </div>
+      )}
 
-      <section style={heroStyle}>
-        <div style={heroTitleBlockStyle}>
-          <div style={heroTitleStyle}>Perception Matrix</div>
-          <div style={heroSubtitleStyle}>
+      <section className="mt-6 flex min-h-[68vh] flex-col justify-center">
+        <div className="z-10 mb-[-48px] pl-2">
+          <div className="text-[34px] font-black tracking-[-0.04em]">Perception Matrix</div>
+          <div className="mt-1.5 text-[17px] font-semibold text-foreground/60">
             Hover categories to explore score, target, and status.
           </div>
         </div>
 
-        <div className="radar-mobile-wrap" style={radarWrapStyle}>
+        <div className="flex w-full items-center justify-center overflow-x-auto px-6">
           <RadarChart scores={scores} size={850} />
         </div>
 
         {Object.keys(scores).length > 0 && (
-          <div style={confidenceBannerStyle}>
-            <strong style={{ color: "rgba(255,255,255,0.88)" }}>How to read these scores:</strong>{" "}
-            Politeness is highly reliable. Strictness and Formality run slightly high but are
-            directionally trustworthy.{" "}
-            <strong style={{ color: "#f87171" }}>
-              Clarity and Contestability are the least reliable dimensions
-            </strong>{" "}
-            — both tend to score more favorably than a human reader would agree with, so treat high
-            scores on those two with extra skepticism. Affect looks stable on average but can be wrong
-            in either direction on any single policy — use the keyword evidence to sanity-check it.
-          </div>
+          <Alert className="mx-auto mt-[18px] max-w-[780px] text-[13px] leading-relaxed">
+            <AlertDescription className="text-foreground/72">
+              <strong className="text-foreground/88">How to read these scores:</strong>{" "}
+              Politeness is highly reliable. Strictness and Formality run slightly high but are
+              directionally trustworthy.{" "}
+              <strong className="text-red-400">
+                Clarity and Contestability are the least reliable dimensions
+              </strong>{" "}
+              — both tend to score more favorably than a human reader would agree with, so treat high
+              scores on those two with extra skepticism. Affect looks stable on average but can be wrong
+              in either direction on any single policy — use the keyword evidence to sanity-check it.
+            </AlertDescription>
+          </Alert>
         )}
       </section>
 
-      <section className="analyze-compare-grid" style={compareGridStyle}>
-        <Card
-          title="Original Input"
-          right={
-            <button
-              onClick={handleAnalyze}
-              disabled={isScoring}
-              style={primaryButtonStyle(isScoring)}
-            >
-              {isScoring ? "Analyzing..." : "Analyze"}
-            </button>
-          }
-        >
-          <div style={demoPolicyWrapStyle}>
-            <div style={demoPolicyLabelStyle}>Try a demo policy:</div>
+      <section className="mt-3 grid grid-cols-1 items-start gap-[18px] lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-black">Original Input</CardTitle>
+            <CardAction>
+              <Button variant="brand" size="sm" onClick={handleAnalyze} disabled={isScoring}>
+                {isScoring ? "Analyzing..." : "Analyze"}
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-3.5 grid gap-2">
+              <div className="text-[13px] font-black text-foreground/66">Try a demo policy:</div>
 
-            <div style={demoPolicyButtonsStyle}>
-              {DEMO_POLICIES.map((policy) => (
-                <button
-                  key={policy.name}
-                  onClick={() => {
-                    setInput(policy.text);
-                    setSelectedDemoName(policy.name);
-                    setStatusMessage(`Loaded demo: ${policy.name}`);
-                  }}
-                  style={demoPolicyButtonStyle}
-                >
-                  {policy.name}
-                </button>
-              ))}
+              <div className="flex flex-wrap gap-2.5">
+                {DEMO_POLICIES.map((policy) => (
+                  <Button
+                    key={policy.name}
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() => {
+                      setInput(policy.text);
+                      setSelectedDemoName(policy.name);
+                      setStatusMessage(`Loaded demo: ${policy.name}`);
+                    }}
+                  >
+                    {policy.name}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <textarea
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              setSelectedDemoName("");
-            }}
-            placeholder="Paste your syllabus here..."
-            style={largeTextareaStyle}
-          />
+            <Textarea
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setSelectedDemoName("");
+              }}
+              placeholder="Paste your syllabus here..."
+              className="min-h-[250px] resize-y text-base leading-relaxed"
+            />
 
-          <div style={subPanelStyle}>
-            <div style={miniHeaderStyle}>Extracted AI Policy</div>
-            <div style={policyBoxStyle}>
-              {renderHighlightedPolicy(aiPolicyText, selectedKeyword)}
+            <div className="mt-4 border-t border-border pt-3.5">
+              <div className="mb-2.5 text-sm font-black text-foreground/86">Extracted AI Policy</div>
+              <div className="min-h-[190px] rounded-lg border border-border bg-card p-4 text-base leading-relaxed whitespace-pre-wrap">
+                {renderHighlightedPolicy(aiPolicyText, selectedKeyword)}
+              </div>
             </div>
-          </div>
+          </CardContent>
         </Card>
 
-        <Card title="Optimized Rewrite">
-          <RewritePanel
-            rewrite={rewrite}
-            onRewrite={handleRewrite}
-            isRewriting={isRewriting}
-          />
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-black">Optimized Rewrite</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RewritePanel rewrite={rewrite} onRewrite={handleRewrite} isRewriting={isRewriting} />
 
-          <div style={subPanelStyle}>
-            <div style={miniHeaderStyle}>Rewrite Validation</div>
-            <ValidationPanel
-              originalScores={originalScores}
-              rewrittenScores={rewrittenScores}
-              rewriteMode={rewriteMode}
-            />
-          </div>
+            <div className="mt-4 border-t border-border pt-3.5">
+              <div className="mb-2.5 text-sm font-black text-foreground/86">Rewrite Validation</div>
+              <ValidationPanel
+                originalScores={originalScores}
+                rewrittenScores={rewrittenScores}
+                rewriteMode={rewriteMode}
+              />
+            </div>
+          </CardContent>
         </Card>
       </section>
 
-      <section style={{ marginTop: 18 }}>
-        <Card title="Analysis Details">
-          <div style={tabsStyle}>
-            <TabButton active={activePanel === "insights"} onClick={() => setActivePanel("insights")}>
-              Score Insights
-            </TabButton>
-            <TabButton active={activePanel === "keywords"} onClick={() => setActivePanel("keywords")}>
-              Keywords
-            </TabButton>
-            <TabButton active={activePanel === "candidates"} onClick={() => setActivePanel("candidates")}>
-              Rewrite Candidates
-            </TabButton>
-            <TabButton active={activePanel === "validation"} onClick={() => setActivePanel("validation")}>
-              Rewrite Explanation
-            </TabButton>
-          </div>
+      <section className="mt-[18px]">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-black">Analysis Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs value={activePanel} onValueChange={setActivePanel}>
+              <TabsList className="h-auto flex-wrap bg-transparent p-0">
+                <TabsTrigger
+                  value="insights"
+                  className="rounded-full border border-border px-3.5 py-2.5 data-active:border-brand-cyan/48 data-active:bg-gradient-to-br data-active:from-brand-cyan/18 data-active:to-brand-purple/14"
+                >
+                  Score Insights
+                </TabsTrigger>
+                <TabsTrigger
+                  value="keywords"
+                  className="rounded-full border border-border px-3.5 py-2.5 data-active:border-brand-cyan/48 data-active:bg-gradient-to-br data-active:from-brand-cyan/18 data-active:to-brand-purple/14"
+                >
+                  Keywords
+                </TabsTrigger>
+                <TabsTrigger
+                  value="candidates"
+                  className="rounded-full border border-border px-3.5 py-2.5 data-active:border-brand-cyan/48 data-active:bg-gradient-to-br data-active:from-brand-cyan/18 data-active:to-brand-purple/14"
+                >
+                  Rewrite Candidates
+                </TabsTrigger>
+                <TabsTrigger
+                  value="validation"
+                  className="rounded-full border border-border px-3.5 py-2.5 data-active:border-brand-cyan/48 data-active:bg-gradient-to-br data-active:from-brand-cyan/18 data-active:to-brand-purple/14"
+                >
+                  Rewrite Explanation
+                </TabsTrigger>
+              </TabsList>
 
-          <div style={{ marginTop: 16 }}>{renderActivePanel()}</div>
+              <TabsContent value="insights" className="mt-4">
+                <ScoreExplanationPanel scores={scores} />
+              </TabsContent>
+
+              <TabsContent value="keywords" className="mt-4">
+                <div className="grid gap-4">
+                  <KeywordPanel
+                    keywordsByCategory={keywordsByCategory}
+                    selectedKeyword={selectedKeyword}
+                    setSelectedKeyword={setSelectedKeyword}
+                  />
+                  <KeywordExplanationPanel keywordsByCategory={keywordsByCategory} />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="candidates" className="mt-4">
+                <RewriteCandidatesPanel candidates={rewriteCandidates} bestIndex={bestRewriteIndex} />
+              </TabsContent>
+
+              <TabsContent value="validation" className="mt-4">
+                <div className="grid gap-4">
+                  <ValidationPanel
+                    originalScores={originalScores}
+                    rewrittenScores={rewrittenScores}
+                    rewriteMode={rewriteMode}
+                  />
+                  <RewriteExplanationPanel
+                    originalScores={originalScores}
+                    rewrittenScores={rewrittenScores}
+                    candidates={rewriteCandidates}
+                    bestIndex={bestRewriteIndex}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
         </Card>
       </section>
     </div>
   );
 }
-
-function TabButton({ active, onClick, children }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: "10px 14px",
-        borderRadius: 999,
-        border: active
-          ? "1px solid rgba(34,211,238,0.48)"
-          : "1px solid rgba(255,255,255,0.12)",
-        background: active
-          ? "linear-gradient(135deg, rgba(34,211,238,0.18), rgba(168,85,247,0.14))"
-          : "rgba(255,255,255,0.045)",
-        color: active ? "white" : "rgba(255,255,255,0.72)",
-        fontWeight: 900,
-        cursor: "pointer",
-        boxShadow: active ? "0 12px 30px rgba(34,211,238,0.10)" : "none",
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-const topBarStyle = {
-  marginTop: 14,
-  display: "flex",
-  gap: 12,
-  alignItems: "center",
-  flexWrap: "wrap",
-};
-
-const topHelpTextStyle = {
-  fontSize: 15,
-  color: "rgba(255,255,255,0.62)",
-  fontWeight: 600,
-};
-
-const selectStyle = {
-  background: "rgba(255,255,255,0.06)",
-  color: "white",
-  border: "1px solid rgba(255,255,255,0.16)",
-  borderRadius: 14,
-  padding: "10px 14px",
-  fontWeight: 800,
-  backdropFilter: "blur(8px)",
-  outline: "none",
-};
-
-const statusStyle = {
-  marginTop: 12,
-  padding: "10px 12px",
-  borderRadius: 14,
-  border: "1px solid rgba(255,255,255,0.14)",
-  background: "rgba(255,255,255,0.06)",
-  color: "rgba(255,255,255,0.82)",
-  fontSize: 15,
-  fontWeight: 600,
-};
-
-const heroStyle = {
-  marginTop: 26,
-  minHeight: "68vh",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-};
-
-const heroTitleBlockStyle = {
-  marginBottom: -48,
-  zIndex: 2,
-  paddingLeft: 8,
-};
-
-const heroTitleStyle = {
-  fontSize: 34,
-  fontWeight: 1000,
-  letterSpacing: "-0.04em",
-  color: "white",
-};
-
-const heroSubtitleStyle = {
-  marginTop: 6,
-  fontSize: 17,
-  color: "rgba(255,255,255,0.6)",
-  fontWeight: 600,
-};
-
-const radarWrapStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-};
-
-const confidenceBannerStyle = {
-  marginTop: 18,
-  marginLeft: "auto",
-  marginRight: "auto",
-  maxWidth: 780,
-  padding: "12px 16px",
-  borderRadius: 14,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.035)",
-  color: "rgba(255,255,255,0.72)",
-  fontSize: 13,
-  lineHeight: 1.6,
-};
-
-const compareGridStyle = {
-  marginTop: 12,
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: 18,
-  alignItems: "start",
-};
-
-const largeTextareaStyle = {
-  width: "100%",
-  minHeight: 250,
-  resize: "vertical",
-  background:
-    "linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035))",
-  color: "rgba(255,255,255,0.92)",
-  border: "1px solid rgba(255,255,255,0.16)",
-  borderRadius: 18,
-  padding: "16px 18px",
-  outline: "none",
-  fontSize: 16,
-  lineHeight: 1.6,
-  boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.03)",
-};
-
-const subPanelStyle = {
-  marginTop: 16,
-  paddingTop: 14,
-  borderTop: "1px solid rgba(255,255,255,0.10)",
-};
-
-const miniHeaderStyle = {
-  marginBottom: 10,
-  fontSize: 14,
-  fontWeight: 950,
-  color: "rgba(255,255,255,0.86)",
-};
-
-const policyBoxStyle = {
-  minHeight: 190,
-  whiteSpace: "pre-wrap",
-  lineHeight: 1.65,
-  fontSize: 16,
-  padding: 16,
-  borderRadius: 16,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.035)",
-  color: "rgba(255,255,255,0.88)",
-};
-
-const tabsStyle = {
-  display: "flex",
-  gap: 10,
-  flexWrap: "wrap",
-};
-
-const markStyle = {
-  background: "rgba(34,211,238,0.30)",
-  color: "white",
-  padding: "0 4px",
-  borderRadius: 5,
-};
-
-function primaryButtonStyle(disabled) {
-  return {
-    padding: "9px 15px",
-    borderRadius: 14,
-    border: "1px solid rgba(255,255,255,0.18)",
-    background: disabled
-      ? "rgba(255,255,255,0.08)"
-      : "linear-gradient(135deg, rgba(168,85,247,0.95), rgba(34,211,238,0.95))",
-    color: "white",
-    fontWeight: 900,
-    cursor: disabled ? "not-allowed" : "pointer",
-    boxShadow: "0 10px 28px rgba(34,211,238,0.16)",
-  };
-}
-
-const demoPolicyWrapStyle = {
-  marginBottom: 14,
-  display: "grid",
-  gap: 9,
-};
-
-const demoPolicyLabelStyle = {
-  fontSize: 13,
-  fontWeight: 950,
-  color: "rgba(255,255,255,0.66)",
-};
-
-const demoPolicyButtonsStyle = {
-  display: "flex",
-  gap: 10,
-  flexWrap: "wrap",
-};
-
-const demoPolicyButtonStyle = {
-  padding: "9px 12px",
-  borderRadius: 999,
-  border: "1px solid rgba(255,255,255,0.13)",
-  background: "rgba(255,255,255,0.055)",
-  color: "white",
-  fontWeight: 850,
-  cursor: "pointer",
-};

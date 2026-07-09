@@ -1,294 +1,197 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, Moon, Sun } from "lucide-react";
 import { APP_NAME } from "../data/categories";
-import logo from "../assets/SyllanceTransparentLogo.png"
+import logo from "../assets/SyllanceTransparentLogo.png";
+import { useTheme } from "../context/ThemeContext";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 
+function NavTab({ to, active, children }) {
+  return (
+    <Button
+      asChild
+      variant="ghost"
+      className={
+        active
+          ? "rounded-lg bg-white/10 font-bold text-foreground ring-2 ring-primary/25"
+          : "rounded-lg font-bold text-foreground/70 hover:text-foreground"
+      }
+    >
+      <Link to={to}>{children}</Link>
+    </Button>
+  );
+}
 
-export default function Header({ page, setPage }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [researchOpen, setResearchOpen] = useState(false);
+export default function Header() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
-  function go(key) {
-    setPage(key);
-    setMenuOpen(false);
-    setResearchOpen(false);
-  }
+  const researchActive =
+    location.pathname === "/about" || location.pathname === "/interactions";
 
   return (
-    <header style={headerShell}>
-      <div style={headerInner}>
-        <div style={brand} onClick={() => go("home")}>
-          <img className="header-logo" src={logo} alt="SyllanceAI logo" style={logoImg} />
-
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-xl">
+      <div className="relative grid w-full grid-cols-[auto_1fr_auto] items-center gap-8 px-11 py-4">
+        <Link to="/" className="flex items-center gap-5 justify-self-start">
+          <img
+            className="header-logo h-[100px] w-[100px] object-contain"
+            src={logo}
+            alt="SyllanceAI logo"
+          />
           <div>
-            <div className="header-brand-name" style={brandName}>{APP_NAME}</div>
-            <div style={tagline}>AI policy perception analysis</div>
+            <div className="header-brand-name text-[54px] leading-[0.95] font-black tracking-[-1.8px]">
+              {APP_NAME}
+            </div>
+            <div className="mt-2 text-base text-foreground/60">
+              AI policy perception analysis
+            </div>
           </div>
-        </div>
+        </Link>
 
-        <nav className="desktop-nav" style={nav}>
-          <button onClick={() => go("home")} style={tab(page === "home")}>
+        <nav className="desktop-nav flex items-center justify-self-center gap-3.5 rounded-xl border border-border bg-white/5 p-2">
+          <NavTab to="/" active={location.pathname === "/"}>
             Home
-          </button>
-
-          <button onClick={() => go("analyze")} style={tab(page === "analyze")}>
+          </NavTab>
+          <NavTab to="/analyze" active={location.pathname === "/analyze"}>
             Analyze
-          </button>
+          </NavTab>
 
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setResearchOpen(!researchOpen)}
-              style={tab(page === "about")}
-            >
-              Research ▾
-            </button>
-
-            {researchOpen && (
-              <div style={researchDropdown}>
-                <button onClick={() => go("about")} style={dropItem}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={
+                  researchActive
+                    ? "rounded-lg bg-white/10 font-bold text-foreground ring-2 ring-primary/25"
+                    : "rounded-lg font-bold text-foreground/70 hover:text-foreground"
+                }
+              >
+                Research ▾
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="w-[310px] p-2">
+              <DropdownMenuItem asChild className="flex-col items-start gap-1 rounded-lg p-3">
+                <Link to="/about">
                   <strong>Research overview</strong>
-                  <span>Project goal and motivation</span>
-                </button>
-                <button onClick={() => go("interactions")} style={dropItem}>
+                  <span className="text-xs text-muted-foreground">
+                    Project goal and motivation
+                  </span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="flex-col items-start gap-1 rounded-lg p-3">
+                <Link to="/interactions">
                   <strong>How categories interact</strong>
-                  <span>Trade-offs between policy dimensions</span>
-                </button>
-                
-              </div>
-            )}
-          </div>
+                  <span className="text-xs text-muted-foreground">
+                    Trade-offs between policy dimensions
+                  </span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
-        <div style={actions}>
-          <button className="header-launch" onClick={() => go("analyze")} style={ctaSmall}>
-            Launch tool
-          </button>
-
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              ...hamburger,
-              background: menuOpen
-                ? "rgba(255,255,255,0.12)"
-                : "rgba(255,255,255,0.055)",
-            }}
-            aria-label="Open menu"
+        <div className="flex items-center justify-self-end gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+            className="rounded-lg"
           >
-            <span style={{ display: "block", transform: menuOpen ? "rotate(90deg)" : "none" }}>
-              {menuOpen ? "×" : "☰"}
-            </span>
-          </button>
+            {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
+          </Button>
+
+          <Button
+            asChild
+            variant="brand"
+            className="header-launch rounded-xl px-6 py-6 text-[17px]"
+          >
+            <Link to="/analyze">Launch tool</Link>
+          </Button>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Open menu"
+                className="h-14 w-14 rounded-xl"
+              >
+                <Menu className="size-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[340px]">
+              <SheetHeader>
+                <SheetTitle>{APP_NAME}</SheetTitle>
+              </SheetHeader>
+              <div className="grid gap-2.5 px-4 pb-4">
+                <SheetClose asChild>
+                  <Link
+                    to="/"
+                    className="rounded-lg border border-border bg-white/5 px-3.5 py-3 text-sm font-extrabold"
+                  >
+                    Home
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    to="/analyze"
+                    className="rounded-lg border border-border bg-white/5 px-3.5 py-3 text-sm font-extrabold"
+                  >
+                    Analyze
+                  </Link>
+                </SheetClose>
+
+                <div className="mt-1.5 ml-1 text-[11px] font-black tracking-widest text-foreground/45 uppercase">
+                  Research
+                </div>
+
+                <SheetClose asChild>
+                  <Link
+                    to="/about"
+                    className="rounded-lg border border-border bg-white/5 px-3.5 py-3 text-sm font-extrabold"
+                  >
+                    Research overview
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    to="/interactions"
+                    className="rounded-lg border border-border bg-white/5 px-3.5 py-3 text-sm font-extrabold"
+                  >
+                    How categories interact
+                  </Link>
+                </SheetClose>
+
+                <SheetClose asChild>
+                  <Button
+                    variant="brand"
+                    className="mt-1 rounded-lg"
+                    onClick={() => navigate("/analyze")}
+                  >
+                    Analyze now
+                  </Button>
+                </SheetClose>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-
-        {menuOpen && (
-          <div style={mobileDropdown}>
-            <button onClick={() => go("home")} style={mobileItem}>
-              Home
-            </button>
-            <button onClick={() => go("analyze")} style={mobileItem}>
-              Analyze
-            </button>
-
-            <div style={mobileSectionLabel}>Research</div>
-
-            <button onClick={() => go("about")} style={mobileItem}>
-              Research overview
-            </button>
-            <button onClick={() => go("interactions")} style={mobileItem}>
-              How categories interact
-            </button>
-            
-
-            <button onClick={() => go("analyze")} style={mobileCta}>
-              Analyze now
-            </button>
-          </div>
-        )}
       </div>
     </header>
   );
 }
-
-const headerShell = {
-  position: "sticky",
-  top: 0,
-  zIndex: 50,
-  width: "100%",
-  borderBottom: "1px solid rgba(255,255,255,0.08)",
-  background: "rgba(5,6,10,0.84)",
-  backdropFilter: "blur(22px)",
-};
-
-const headerInner = {
-  width: "100%",
-  maxWidth: "100%",
-  margin: "0 auto",
-  padding: "18px 44px",
-  display: "grid",
-  gridTemplateColumns: "auto 1fr auto",
-  alignItems: "center",
-  gap: 34,
-  position: "relative",
-};
-
-const brand = {
-  display: "flex",
-  alignItems: "center",
-  gap: 22,
-  cursor: "pointer",
-  justifySelf: "start",
-};
-
-const logoImg = {
-  height: 100,
-  width: 100,
-  objectFit: "contain",
-};
-
-const brandName = {
-  fontSize: 54,
-  fontWeight: 1000,
-  letterSpacing: -1.8,
-  lineHeight: 0.95,
-};
-
-const tagline = {
-  marginTop: 9,
-  fontSize: 16,
-  color: "rgba(255,255,255,0.60)",
-};
-
-const nav = {
-  justifySelf: "center",
-  display: "flex",
-  alignItems: "center",
-  gap: 14,
-  padding: 8,
-  borderRadius: 20,
-  background: "rgba(255,255,255,0.055)",
-  border: "1px solid rgba(255,255,255,0.08)",
-};
-
-const tab = (active) => ({
-  border: active
-    ? "1px solid rgba(147,197,253,0.85)"
-    : "1px solid transparent",
-  color: active ? "white" : "rgba(255,255,255,0.72)",
-  padding: "11px 17px",
-  borderRadius: 14,
-  fontWeight: 900,
-  fontSize: 15,
-  cursor: "pointer",
-  background: active ? "rgba(255,255,255,0.11)" : "transparent",
-  boxShadow: active ? "0 0 0 2px rgba(59,130,246,0.25)" : "none",
-  transition: "all 0.18s ease",
-})
-
-const actions = {
-  justifySelf: "end",
-  display: "flex",
-  alignItems: "center",
-  gap: 16,
-};
-
-const ctaSmall = {
-  padding: "14px 22px",
-  borderRadius: 16,
-  border: "1px solid rgba(255,255,255,0.14)",
-  background:
-    "linear-gradient(90deg, rgba(168,85,247,0.95), rgba(34,211,238,0.90))",
-  color: "white",
-  fontWeight: 950,
-  fontSize: 17,
-  cursor: "pointer",
-};
-
-const hamburger = {
-  width: 56,
-  height: 56,
-  borderRadius: 18,
-  border: "1px solid rgba(255,255,255,0.14)",
-  color: "white",
-  fontSize: 27,
-  fontWeight: 900,
-  cursor: "pointer",
-  transition: "all 0.18s ease",
-  display: "grid",
-  placeItems: "center",
-  boxShadow: "0 12px 34px rgba(0,0,0,0.28)",
-};
-
-const researchDropdown = {
-  position: "absolute",
-  top: 56,
-  left: "50%",
-  transform: "translateX(-50%)",
-  width: 310,
-  display: "grid",
-  gap: 8,
-  padding: 10,
-  borderRadius: 18,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(8,10,18,0.98)",
-  boxShadow: "0 22px 70px rgba(0,0,0,0.52)",
-};
-
-const dropItem = {
-  display: "grid",
-  gap: 4,
-  textAlign: "left",
-  padding: "12px 13px",
-  borderRadius: 14,
-  border: "1px solid rgba(255,255,255,0.08)",
-  background: "rgba(255,255,255,0.04)",
-  color: "white",
-  cursor: "pointer",
-};
-
-const mobileDropdown = {
-  position: "absolute",
-  top: 108,
-  right: 44,
-  width: 340,
-  display: "grid",
-  gap: 10,
-  padding: 14,
-  borderRadius: 22,
-  border: "1px solid rgba(255,255,255,0.14)",
-  background:
-    "linear-gradient(180deg, rgba(18,20,32,0.99), rgba(8,10,18,0.99))",
-  boxShadow: "0 28px 90px rgba(0,0,0,0.62)",
-  animation: "menuDrop 0.18s ease both",
-};
-
-const mobileItem = {
-  textAlign: "left",
-  padding: "13px 14px",
-  borderRadius: 14,
-  border: "1px solid rgba(255,255,255,0.08)",
-  background: "rgba(255,255,255,0.04)",
-  color: "white",
-  fontSize: 14,
-  fontWeight: 850,
-  cursor: "pointer",
-};
-
-const mobileSectionLabel = {
-  marginTop: 6,
-  marginLeft: 4,
-  fontSize: 11,
-  fontWeight: 950,
-  letterSpacing: 1,
-  textTransform: "uppercase",
-  color: "rgba(255,255,255,0.45)",
-};
-
-const mobileCta = {
-  padding: "14px",
-  borderRadius: 15,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background:
-    "linear-gradient(90deg, rgba(168,85,247,0.95), rgba(34,211,238,0.90))",
-  color: "white",
-  fontWeight: 950,
-  cursor: "pointer",
-};

@@ -61,20 +61,23 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
   return (
     <div style={{ position: "relative", display: "flex", justifyContent: "center", width: "100%" }}>
       <div
+        className="pointer-events-none absolute rounded-full blur-[36px] transition-opacity"
         style={{
-          position: "absolute",
           width: size * 0.95,
           height: size * 0.95,
-          borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(34,211,238,0.22), rgba(168,85,247,0.13), transparent 70%)",
-          filter: "blur(36px)",
+            "radial-gradient(circle, color-mix(in srgb, var(--brand-cyan) 22%, transparent), color-mix(in srgb, var(--brand-purple) 13%, transparent), transparent 70%)",
           opacity: hovered ? 1 : 0.85,
-          pointerEvents: "none",
         }}
       />
 
-      <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`} style={{ overflow: "visible" }}>
+      <svg
+        width={svgSize}
+        height={svgSize}
+        viewBox={`0 0 ${svgSize} ${svgSize}`}
+        className="max-w-full h-auto"
+        style={{ overflow: "visible" }}
+      >
         <defs>
           <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="rgba(168,85,247,0.82)" />
@@ -102,7 +105,7 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
               key={level}
               points={ringPts}
               fill="none"
-              stroke="rgba(255,255,255,0.13)"
+              stroke="color-mix(in srgb, var(--foreground) 13%, transparent)"
               strokeWidth="1.4"
             />
           );
@@ -117,7 +120,7 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
               y1={cy}
               x2={cx + radius * Math.cos(a)}
               y2={cy + radius * Math.sin(a)}
-              stroke="rgba(255,255,255,0.12)"
+              stroke="color-mix(in srgb, var(--foreground) 12%, transparent)"
               strokeWidth="1.3"
             />
           );
@@ -126,7 +129,7 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
         <polygon
           points={polygon}
           fill="url(#radarFill)"
-          stroke="rgba(255,255,255,0.45)"
+          stroke="color-mix(in srgb, var(--foreground) 45%, transparent)"
           strokeWidth="2"
           filter="url(#softGlow)"
           style={{
@@ -182,7 +185,7 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
               <text
                 x={p.ax}
                 y={p.ay}
-                fill={isHovered ? "white" : "rgba(255,255,255,0.95)"}
+                fill="var(--foreground)"
                 fontSize={isHovered ? "36" : "32"}
                 fontWeight="1000"
                 textAnchor={textAnchorValue}
@@ -190,8 +193,8 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
                 style={{
                   letterSpacing: "-0.03em",
                   textShadow: isHovered
-                    ? `0 0 18px ${statusColor}, 0 0 28px rgba(255,255,255,0.35)`
-                    : "0 0 14px rgba(255,255,255,0.32)",
+                    ? `0 0 18px ${statusColor}, 0 0 28px color-mix(in srgb, var(--foreground) 35%, transparent)`
+                    : "0 0 14px color-mix(in srgb, var(--foreground) 32%, transparent)",
                   transition: "all 0.2s ease",
                 }}
               >
@@ -215,71 +218,40 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
               {isHovered && (
                 <foreignObject x={tooltipX} y={tooltipY} width="230" height="190">
                   <div
+                    className="box-border w-[230px] rounded-xl border border-border bg-popover p-3.5 text-popover-foreground backdrop-blur-md"
                     style={{
-                      boxSizing: "border-box",
-                      width: "230px",
-                      padding: "13px 14px",
-                      borderRadius: 16,
-                      border: "1px solid rgba(255,255,255,0.14)",
-                      background: "rgba(13,15,22,0.92)",
-                      backdropFilter: "blur(14px)",
                       boxShadow: `0 18px 45px rgba(0,0,0,0.35), 0 0 22px ${statusColor}44`,
-                      color: "white",
                       fontFamily: "inherit",
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
-                      <div style={{ fontSize: 15, fontWeight: 950 }}>{p.category}</div>
-                      <div style={{ fontSize: 15, fontWeight: 950 }}>
+                    <div className="flex justify-between gap-2.5">
+                      <div className="text-[15px] font-black">{p.category}</div>
+                      <div className="text-[15px] font-black">
                         {typeof score === "number" ? score.toFixed(1) : "_"} / {max}
                       </div>
                     </div>
 
-                    <div style={{ marginTop: 6, fontSize: 15, color: "rgba(255,255,255,0.68)" }}>
+                    <div className="mt-1.5 text-[15px] text-popover-foreground/68">
                       Target: {CATEGORY_TARGETS[p.category]}
                     </div>
 
                     {comp && (
-                      <div
-                        style={{
-                          marginTop: 7,
-                          fontSize: 12,
-                          fontWeight: 900,
-                          color: statusColor,
-                        }}
-                      >
+                      <div className="mt-1.5 text-xs font-extrabold" style={{ color: statusColor }}>
                         {getStatusLabel(comp.status)}
                       </div>
                     )}
 
                     {interpretation && (
-                      <div
-                        style={{
-                          marginTop: 7,
-                          fontSize: 11,
-                          lineHeight: 1.45,
-                          color: "rgba(255,255,255,0.78)",
-                        }}
-                      >
+                      <div className="mt-1.5 text-[11px] leading-snug text-popover-foreground/78">
                         {interpretation}
                       </div>
                     )}
 
                     {tierMeta && (
-                      <div
-                        style={{
-                          marginTop: 8,
-                          paddingTop: 8,
-                          borderTop: "1px solid rgba(255,255,255,0.12)",
-                        }}
-                      >
+                      <div className="mt-2 border-t border-border pt-2">
                         <div
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 900,
-                            color: tierMeta.color,
-                            letterSpacing: "0.5px",
-                          }}
+                          className="text-[11px] font-black tracking-wide"
+                          style={{ color: tierMeta.color }}
                         >
                           {reliabilityDots(reliability.tier)} {tierMeta.label}
                         </div>

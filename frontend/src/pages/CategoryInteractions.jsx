@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import { Card, CardContent } from "../components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Slider } from "../components/ui/slider";
 
 const OPTIONS = {
   Politeness: {
@@ -168,22 +177,31 @@ export default function CategoryInteractions() {
       : active.insightHigh;
 
   return (
-    <main style={page}>
-      <section style={hero}>
-        <div style={badge}>Research lens</div>
-        <h1 style={title}>How Categories Interact</h1>
-        <p style={subtitle}>
+    <main className="grid gap-8 py-11">
+      <section className="max-w-[1200px]">
+        <div className="w-fit rounded-full border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-2 text-xs font-black tracking-wide text-brand-cyan uppercase">
+          Research lens
+        </div>
+        <h1
+          className="my-3 font-black"
+          style={{ fontSize: "clamp(58px, 7vw, 104px)", lineHeight: 0.95, letterSpacing: "-3px" }}
+        >
+          How Categories Interact
+        </h1>
+        <p className="m-0 max-w-[1120px] text-xl leading-relaxed text-foreground/70">
           Language is not optimized for a single goal. When writing policies or
           instructions, improving one quality such as clarity, politeness, or
           authority can affect others.
         </p>
       </section>
 
-      <section style={overviewBox}>
-        <div style={infoIcon}>i</div>
+      <section className="grid grid-cols-[64px_1fr] gap-5 rounded-[30px] border border-border bg-gradient-to-br from-brand-purple/10 to-brand-cyan/[0.055] p-7">
+        <div className="bg-brand-gradient grid size-[52px] place-items-center rounded-full text-2xl font-black text-white">
+          i
+        </div>
         <div>
-          <h2 style={overviewTitle}>Language is not optimized for a single goal.</h2>
-          <p style={overviewText}>
+          <h2 className="m-0 text-2xl font-black">Language is not optimized for a single goal.</h2>
+          <p className="mt-2.5 max-w-[1180px] text-lg leading-relaxed text-foreground/75">
             Research in communication and linguistics shows that people balance
             competing goals like clarity, politeness, and authority when choosing
             how to phrase something. Syllance.AI models language as a system of
@@ -193,88 +211,97 @@ export default function CategoryInteractions() {
         </div>
       </section>
 
-      <section className="tradeoff-box" style={tradeoffBox}>
-        <div style={controlPanel}>
-          <h2 style={sectionTitle}>See a Trade-Off in Action</h2>
-          <p style={body}>Adjust one category and see how it may affect others.</p>
+      <section className="grid grid-cols-1 items-stretch gap-6 rounded-[30px] border border-border bg-card p-7 lg:grid-cols-[0.9fr_0.9fr_1.05fr]">
+        <div className="grid content-start">
+          <h2 className="m-0 text-4xl font-black tracking-[-0.9px]">See a Trade-Off in Action</h2>
+          <p className="mt-2.5 mb-5 text-base leading-relaxed text-foreground/70">
+            Adjust one category and see how it may affect others.
+          </p>
 
-          <label style={label}>Increase focus on:</label>
-          <select
-            value={focus}
-            onChange={(e) => setFocus(e.target.value)}
-            style={select}
-          >
-            <option>Clarity</option>
-            <option>Politeness</option>
-            <option>Strictness</option>
-            <option>Formality</option>
-          </select>
+          <label className="mb-2 block text-sm font-bold text-foreground/70">
+            Increase focus on:
+          </label>
+          <Select value={focus} onValueChange={setFocus}>
+            <SelectTrigger className="w-full font-bold">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Clarity">Clarity</SelectItem>
+              <SelectItem value="Politeness">Politeness</SelectItem>
+              <SelectItem value="Strictness">Strictness</SelectItem>
+              <SelectItem value="Formality">Formality</SelectItem>
+            </SelectContent>
+          </Select>
 
-          <input
-            type="range"
-            min="1"
-            max="3"
-            step="0.01"
-            value={level}
-            onChange={(e) => setLevel(Number(e.target.value))}
-            style={slider}
+          <Slider
+            className="mt-6"
+            min={1}
+            max={3}
+            step={0.01}
+            value={[level]}
+            onValueChange={([v]) => setLevel(v)}
           />
 
-          <div style={sliderLabels}>
+          <div className="mt-2 flex justify-between text-xs text-foreground/60">
             <span>Low</span>
             <span>Medium</span>
             <span>High</span>
           </div>
 
-          <div style={focusPill}>
+          <div className="mt-[18px] w-fit rounded-full border border-border bg-white/[0.045] px-3 py-2 text-xs text-foreground/70">
             Current emphasis: <strong>{levelKey}</strong>
           </div>
         </div>
 
-        <div style={impactPanel}>
-          <div style={panelTitle}>Potential impact on other categories</div>
+        <div className="rounded-3xl border border-border bg-white/4 p-[22px]">
+          <div className="mb-3.5 text-base font-black">Potential impact on other categories</div>
           {active.impacts[levelKey].map(([cat, impact]) => (
-            <div key={cat} style={impactRow}>
+            <div
+              key={cat}
+              className="flex justify-between gap-4 border-b border-border py-3 text-base last:border-b-0"
+            >
               <strong>{cat}</strong>
               <span>{impact}</span>
             </div>
           ))}
         </div>
 
-        <div style={insightBox}>
-          <div style={insightTitle}>✦ Insight</div>
-          <p style={insightText}>{insight}</p>
+        <div className="rounded-3xl border border-border bg-gradient-to-br from-brand-purple/[0.18] to-brand-cyan/8 p-6">
+          <div className="mb-3 text-2xl font-black">✦ Insight</div>
+          <p className="m-0 text-lg leading-relaxed text-foreground/85">{insight}</p>
         </div>
       </section>
 
       <section>
-        <h2 style={sectionTitle}>Common Trade-Offs</h2>
-        <div className="tradeoff-grid" style={grid}>
+        <h2 className="m-0 text-4xl font-black tracking-[-0.9px]">Common Trade-Offs</h2>
+        <div className="mt-[18px] grid grid-cols-1 gap-4 md:grid-cols-2">
           {COMMON_TRADEOFFS.map((card) => (
-            <div key={card.title} style={cardStyle}>
-              <h3 style={cardTitle}>{card.title}</h3>
-              <p style={cardText}>{card.desc}</p>
+            <Card key={card.title} className="rounded-3xl">
+              <CardContent>
+                <h3 className="m-0 text-2xl font-black">{card.title}</h3>
+                <p className="mt-3 mb-4.5 text-lg leading-relaxed text-foreground/70">{card.desc}</p>
 
-              <div style={exampleRow}>
-                <div style={exampleBox}>
-                  <div>{card.left}</div>
-                  <small>{card.leftLabel}</small>
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3.5">
+                  <div className="grid min-h-[122px] content-center gap-3 rounded-xl border border-border bg-white/[0.055] p-[18px] text-lg leading-snug">
+                    <div>{card.left}</div>
+                    <small className="text-foreground/60">{card.leftLabel}</small>
+                  </div>
+
+                  <div className="text-3xl font-black text-brand-cyan/80">↔</div>
+
+                  <div className="grid min-h-[122px] content-center gap-3 rounded-xl border border-border bg-white/[0.055] p-[18px] text-lg leading-snug">
+                    <div>{card.right}</div>
+                    <small className="text-foreground/60">{card.rightLabel}</small>
+                  </div>
                 </div>
-
-                <div style={swap}>↔</div>
-
-                <div style={exampleBox}>
-                  <div>{card.right}</div>
-                  <small>{card.rightLabel}</small>
-                </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
 
-      <section style={references}>
-        <h2 style={sectionTitle}>References</h2>
+      <section className="rounded-[30px] border border-border bg-white/[0.035] p-7">
+        <h2 className="m-0 text-4xl font-black tracking-[-0.9px]">References</h2>
         <Ref
           title="Brown, P., & Levinson, S. (1987). Politeness: Some Universals in Language Usage. Cambridge University Press."
           desc="Foundational work on how speakers use language to maintain politeness, often through indirect strategies."
@@ -294,293 +321,12 @@ export default function CategoryInteractions() {
 
 function Ref({ title, desc }) {
   return (
-    <div style={refItem}>
-      <div style={refIcon}>▣</div>
+    <div className="mt-[18px] grid grid-cols-[42px_1fr] items-start gap-3.5">
+      <div className="grid size-[34px] place-items-center rounded-[10px] bg-brand-purple/15">▣</div>
       <div>
-        <div style={refTitle}>{title}</div>
-        <div style={refDesc}>{desc}</div>
+        <div className="text-lg font-black">{title}</div>
+        <div className="mt-1 text-base leading-snug text-foreground/65">{desc}</div>
       </div>
     </div>
   );
 }
-
-const page = {
-  display: "grid",
-  gap: 34,
-  padding: "44px 0 80px",
-};
-
-const hero = {
-  maxWidth: 1200,
-};
-
-const badge = {
-  width: "fit-content",
-  padding: "8px 12px",
-  borderRadius: 999,
-  background: "rgba(34,211,238,0.10)",
-  border: "1px solid rgba(34,211,238,0.20)",
-  color: "rgba(34,211,238,0.92)",
-  fontSize: 13,
-  fontWeight: 950,
-  textTransform: "uppercase",
-  letterSpacing: 1,
-};
-
-const title = {
-  margin: "18px 0 12px",
-  fontSize: "clamp(58px, 7vw, 104px)",
-  lineHeight: 0.95,
-  letterSpacing: -3,
-  fontWeight: 1000,
-};
-
-const subtitle = {
-  margin: 0,
-  maxWidth: 1120,
-  fontSize: 23,
-  lineHeight: 1.6,
-  color: "rgba(255,255,255,0.72)",
-};
-
-const overviewBox = {
-  display: "grid",
-  gridTemplateColumns: "64px 1fr",
-  gap: 22,
-  padding: 30,
-  borderRadius: 30,
-  border: "1px solid rgba(255,255,255,0.10)",
-  background:
-    "linear-gradient(135deg, rgba(168,85,247,0.10), rgba(34,211,238,0.055)), rgba(255,255,255,0.035)",
-};
-
-const infoIcon = {
-  width: 52,
-  height: 52,
-  borderRadius: 999,
-  display: "grid",
-  placeItems: "center",
-  background:
-    "linear-gradient(135deg, rgba(168,85,247,0.95), rgba(34,211,238,0.82))",
-  fontSize: 28,
-  fontWeight: 950,
-};
-
-const overviewTitle = {
-  margin: 0,
-  fontSize: 28,
-  fontWeight: 950,
-};
-
-const overviewText = {
-  margin: "10px 0 0",
-  maxWidth: 1180,
-  fontSize: 18,
-  lineHeight: 1.75,
-  color: "rgba(255,255,255,0.75)",
-};
-
-const tradeoffBox = {
-  display: "grid",
-  gridTemplateColumns: "0.9fr 0.9fr 1.05fr",
-  gap: 24,
-  alignItems: "stretch",
-  padding: 30,
-  borderRadius: 30,
-  border: "1px solid rgba(255,255,255,0.10)",
-  background: "rgba(255,255,255,0.035)",
-};
-
-const controlPanel = {
-  display: "grid",
-  alignContent: "start",
-};
-
-const sectionTitle = {
-  margin: 0,
-  fontSize: 36,
-  letterSpacing: -0.9,
-  fontWeight: 1000,
-};
-
-const body = {
-  margin: "10px 0 20px",
-  fontSize: 17,
-  lineHeight: 1.6,
-  color: "rgba(255,255,255,0.70)",
-};
-
-const label = {
-  display: "block",
-  marginBottom: 8,
-  fontSize: 14,
-  fontWeight: 900,
-  color: "rgba(255,255,255,0.72)",
-};
-
-const select = {
-  width: "100%",
-  padding: "13px 14px",
-  borderRadius: 14,
-  border: "1px solid rgba(255,255,255,0.14)",
-  background: "rgba(255,255,255,0.06)",
-  color: "white",
-  fontWeight: 900,
-};
-
-const slider = {
-  width: "100%",
-  marginTop: 24,
-  accentColor: "#8b5cf6",
-};
-
-const sliderLabels = {
-  display: "flex",
-  justifyContent: "space-between",
-  marginTop: 8,
-  fontSize: 13,
-  color: "rgba(255,255,255,0.58)",
-};
-
-const focusPill = {
-  marginTop: 18,
-  width: "fit-content",
-  padding: "8px 11px",
-  borderRadius: 999,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.045)",
-  fontSize: 13,
-  color: "rgba(255,255,255,0.72)",
-};
-
-const impactPanel = {
-  padding: 22,
-  borderRadius: 24,
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(255,255,255,0.08)",
-};
-
-const panelTitle = {
-  marginBottom: 14,
-  fontSize: 17,
-  fontWeight: 950,
-};
-
-const impactRow = {
-  display: "flex",
-  justifyContent: "space-between",
-  gap: 18,
-  padding: "12px 0",
-  borderBottom: "1px solid rgba(255,255,255,0.07)",
-  fontSize: 17,
-};
-
-const insightBox = {
-  padding: 26,
-  borderRadius: 26,
-  background:
-    "linear-gradient(135deg, rgba(168,85,247,0.18), rgba(34,211,238,0.08))",
-  border: "1px solid rgba(255,255,255,0.10)",
-};
-
-const insightTitle = {
-  fontSize: 24,
-  fontWeight: 1000,
-  marginBottom: 12,
-};
-
-const insightText = {
-  margin: 0,
-  fontSize: 19,
-  lineHeight: 1.7,
-  color: "rgba(255,255,255,0.84)",
-};
-
-const grid = {
-  marginTop: 18,
-  display: "grid",
-  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-  gap: 18,
-};
-
-const cardStyle = {
-  padding: 26,
-  borderRadius: 26,
-  border: "1px solid rgba(255,255,255,0.10)",
-  background: "rgba(255,255,255,0.035)",
-};
-
-const cardTitle = {
-  margin: 0,
-  fontSize: 25,
-  fontWeight: 1000,
-};
-
-const cardText = {
-  margin: "12px 0 18px",
-  fontSize: 18,
-  lineHeight: 1.65,
-  color: "rgba(255,255,255,0.72)",
-};
-
-const exampleRow = {
-  display: "grid",
-  gridTemplateColumns: "1fr auto 1fr",
-  gap: 14,
-  alignItems: "center",
-};
-
-const exampleBox = {
-  minHeight: 122,
-  display: "grid",
-  alignContent: "center",
-  gap: 12,
-  padding: 18,
-  borderRadius: 20,
-  background: "rgba(255,255,255,0.055)",
-  border: "1px solid rgba(255,255,255,0.10)",
-  fontSize: 18,
-  lineHeight: 1.35,
-};
-
-const swap = {
-  fontSize: 30,
-  fontWeight: 1000,
-  color: "rgba(34,211,238,0.80)",
-};
-
-const references = {
-  padding: 30,
-  borderRadius: 30,
-  border: "1px solid rgba(255,255,255,0.10)",
-  background: "rgba(255,255,255,0.035)",
-};
-
-const refItem = {
-  marginTop: 18,
-  display: "grid",
-  gridTemplateColumns: "42px 1fr",
-  gap: 14,
-  alignItems: "start",
-};
-
-const refIcon = {
-  width: 34,
-  height: 34,
-  borderRadius: 10,
-  display: "grid",
-  placeItems: "center",
-  background: "rgba(168,85,247,0.16)",
-};
-
-const refTitle = {
-  fontSize: 18,
-  fontWeight: 950,
-};
-
-const refDesc = {
-  marginTop: 4,
-  fontSize: 16,
-  lineHeight: 1.55,
-  color: "rgba(255,255,255,0.66)",
-};
