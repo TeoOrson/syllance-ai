@@ -1,6 +1,7 @@
 import React from "react";
 import { CATEGORIES, CATEGORY_TARGETS } from "../data/categories";
 import { getScoreComparison, getInterpretation } from "../utils/scoreUtils";
+import { getReliability, TIER_META } from "../data/reliability";
 
 export default function ScorePanel({ scores }) {
   return (
@@ -9,6 +10,8 @@ export default function ScorePanel({ scores }) {
         const score = scores?.[category] ?? null;
         const comp = getScoreComparison(category, score);
         const interpretation = getInterpretation(category, comp?.status);
+        const reliability = getReliability(category);
+        const tierMeta = reliability ? TIER_META[reliability.tier] : null;
 
         return (
           <div
@@ -27,10 +30,26 @@ export default function ScorePanel({ scores }) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <div style={{ fontSize: 12, fontWeight: 900 }}>
-                {category}
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 900 }}>
+                  {category}
+                </div>
+                {tierMeta && (
+                  <span
+                    title={`${tierMeta.label} — human/LLM validation study`}
+                    style={{
+                      fontSize: 10,
+                      letterSpacing: "1px",
+                      color: tierMeta.color,
+                    }}
+                  >
+                    {"●".repeat(tierMeta.dots)}
+                    {"○".repeat(3 - tierMeta.dots)}
+                  </span>
+                )}
               </div>
               <div style={{ fontSize: 12, fontWeight: 900 }}>
                 {typeof score === "number" ? score.toFixed(1) : "_"}/5
@@ -77,6 +96,20 @@ export default function ScorePanel({ scores }) {
                 }}
               >
                 {interpretation}
+              </div>
+            )}
+
+            {/* Reliability caveat — only surfaced for tiers below "high" */}
+            {reliability && reliability.tier !== "high" && (
+              <div
+                style={{
+                  fontSize: 10.5,
+                  lineHeight: 1.5,
+                  color: tierMeta.color,
+                  opacity: 0.9,
+                }}
+              >
+                {reliability.caveat}
               </div>
             )}
           </div>

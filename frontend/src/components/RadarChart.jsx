@@ -1,6 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { CATEGORIES, CATEGORY_TARGETS } from "../data/categories";
 import { getScoreComparison, getInterpretation } from "../utils/scoreUtils";
+import { getReliability, TIER_META } from "../data/reliability";
+
+function reliabilityDots(tier) {
+  const meta = TIER_META[tier];
+  if (!meta) return "";
+  return "●".repeat(meta.dots) + "○".repeat(3 - meta.dots);
+}
 
 function clamp(n, lo, hi) {
   return Math.max(lo, Math.min(hi, n));
@@ -161,6 +168,9 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
             p.ax < cx ? p.ax - 250 : p.ax > cx ? p.ax + 20 : p.ax - 110;
 
           const tooltipY = p.ay < cy ? p.ay - 90 : p.ay + 24;
+          const reliability = getReliability(p.category);
+          const tierMeta = reliability ? TIER_META[reliability.tier] : null;
+          const textAnchorValue = p.ax < cx - 8 ? "end" : p.ax > cx + 8 ? "start" : "middle";
 
           return (
             <g
@@ -175,7 +185,7 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
                 fill={isHovered ? "white" : "rgba(255,255,255,0.95)"}
                 fontSize={isHovered ? "36" : "32"}
                 fontWeight="1000"
-                textAnchor={p.ax < cx - 8 ? "end" : p.ax > cx + 8 ? "start" : "middle"}
+                textAnchor={textAnchorValue}
                 dominantBaseline="middle"
                 style={{
                   letterSpacing: "-0.03em",
@@ -188,8 +198,22 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
                 {p.category}
               </text>
 
+              {tierMeta && (
+                <text
+                  x={p.ax}
+                  y={p.ay + (isHovered ? 30 : 27)}
+                  fill={tierMeta.color}
+                  fontSize={isHovered ? "15" : "13"}
+                  textAnchor={textAnchorValue}
+                  dominantBaseline="middle"
+                  style={{ letterSpacing: "2px", transition: "all 0.2s ease" }}
+                >
+                  {reliabilityDots(reliability.tier)}
+                </text>
+              )}
+
               {isHovered && (
-                <foreignObject x={tooltipX} y={tooltipY} width="230" height="138">
+                <foreignObject x={tooltipX} y={tooltipY} width="230" height="190">
                   <div
                     style={{
                       boxSizing: "border-box",
@@ -238,6 +262,27 @@ export default function RadarChart({ scores, size = 820, max = 5 }) {
                         }}
                       >
                         {interpretation}
+                      </div>
+                    )}
+
+                    {tierMeta && (
+                      <div
+                        style={{
+                          marginTop: 8,
+                          paddingTop: 8,
+                          borderTop: "1px solid rgba(255,255,255,0.12)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 900,
+                            color: tierMeta.color,
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          {reliabilityDots(reliability.tier)} {tierMeta.label}
+                        </div>
                       </div>
                     )}
                   </div>

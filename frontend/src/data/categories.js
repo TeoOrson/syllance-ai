@@ -23,7 +23,7 @@ export const CATEGORY_ANCHORS = {
   Politeness: [
     "Face-Threatening",
     "Directive",
-    "Procedural",
+    "Transactional",
     "Autonomy-Supportive",
     "Face-Preserving",
   ],
@@ -37,7 +37,7 @@ export const CATEGORY_ANCHORS = {
   Strictness: [
     "Flexible",
     "Structured",
-    "Procedural",
+    "Conditional",
     "Controlling",
     "Restrictive",
   ],

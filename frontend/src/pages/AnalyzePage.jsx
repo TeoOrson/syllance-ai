@@ -416,6 +416,20 @@ export default function AnalyzePage() {
         <div className="radar-mobile-wrap" style={radarWrapStyle}>
           <RadarChart scores={scores} size={850} />
         </div>
+
+        {Object.keys(scores).length > 0 && (
+          <div style={confidenceBannerStyle}>
+            <strong style={{ color: "rgba(255,255,255,0.88)" }}>How to read these scores:</strong>{" "}
+            Politeness is highly reliable. Strictness and Formality run slightly high but are
+            directionally trustworthy.{" "}
+            <strong style={{ color: "#f87171" }}>
+              Clarity and Contestability are the least reliable dimensions
+            </strong>{" "}
+            — both tend to score more favorably than a human reader would agree with, so treat high
+            scores on those two with extra skepticism. Affect looks stable on average but can be wrong
+            in either direction on any single policy — use the keyword evidence to sanity-check it.
+          </div>
+        )}
       </section>
 
       <section className="analyze-compare-grid" style={compareGridStyle}>
@@ -604,6 +618,20 @@ const radarWrapStyle = {
   justifyContent: "center",
   alignItems: "center",
   width: "100%",
+};
+
+const confidenceBannerStyle = {
+  marginTop: 18,
+  marginLeft: "auto",
+  marginRight: "auto",
+  maxWidth: 780,
+  padding: "12px 16px",
+  borderRadius: 14,
+  border: "1px solid rgba(255,255,255,0.12)",
+  background: "rgba(255,255,255,0.035)",
+  color: "rgba(255,255,255,0.72)",
+  fontSize: 13,
+  lineHeight: 1.6,
 };
 
 const compareGridStyle = {
